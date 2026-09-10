@@ -1,26 +1,69 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --raw-ivory: #f8f5ee;
+  --raw-cream: #efe8da;
+  --raw-white: #fffdf8;
+  --raw-champagne: #c9ad7a;
+  --raw-gold: #a88955;
+  --raw-sage: #a8b5a0;
+  --raw-sage-deep: #687662;
+  --raw-walnut: #6b4b3e;
+  --raw-espresso: #332821;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ivory: var(--raw-ivory);
+  --color-cream: var(--raw-cream);
+  --color-white: var(--raw-white);
+  --color-champagne: var(--raw-champagne);
+  --color-gold: var(--raw-gold);
+  --color-sage: var(--raw-sage);
+  --color-sage-deep: var(--raw-sage-deep);
+  --color-walnut: var(--raw-walnut);
+  --color-espresso: var(--raw-espresso);
+
+  --font-display: var(--font-bodoni);
+  --font-body: var(--font-manrope);
+  --font-arabic: var(--font-plex-arabic);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--raw-ivory);
+  color: var(--raw-espresso);
+  font-family: var(--font-manrope), "Segoe UI", sans-serif;
+}
+
+::selection {
+  background: var(--raw-champagne);
+  color: var(--raw-espresso);
+}
+
+:focus-visible {
+  outline: 2px solid var(--raw-gold);
+  outline-offset: 3px;
+}
+
+/* Custom cursor is applied only when JS enables it on capable pointers */
+@media (hover: hover) and (pointer: fine) {
+  .cursor-enabled {
+    cursor: none;
+  }
 }
