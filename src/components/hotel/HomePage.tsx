@@ -1,5 +1,6 @@
 import { Hero } from "@/components/hotel/Hero";
 import { RoomsPreview } from "@/components/hotel/RoomsPreview";
+import { MoreThanARoom } from "@/components/hotel/MoreThanARoom";
 import { FeaturedAmenities } from "@/components/hotel/FeaturedAmenities";
 import { HotelInformation } from "@/components/hotel/HotelInformation";
 import { PropertyDetails } from "@/components/hotel/PropertyDetails";
@@ -16,9 +17,9 @@ export function HomePage({ locale }: { locale: Locale }) {
     <>
       <Hero locale={locale} />
       <RoomsPreview locale={locale} variant="home" />
+      <MoreThanARoom locale={locale} />
       <FeaturedAmenities locale={locale} />
       <HotelInformation locale={locale} />
-      <PropertyDetails locale={locale} />
       <Shuttle locale={locale} />
       <LocationBlock locale={locale} />
       <ReviewsBlock locale={locale} />
