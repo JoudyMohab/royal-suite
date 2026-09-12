@@ -1,13 +1,48 @@
+export type AmenityId =
+  | "wifi"
+  | "parking"
+  | "shuttle"
+  | "front-desk"
+  | "breakfast"
+  | "housekeeping"
+  | "laundry"
+  | "room-service"
+  | "terrace"
+  | "baggage"
+  | "family"
+  | "nonsmoking"
+  | "tea-coffee";
+
 export type Amenity = {
-  meta: string;
-  label: string;
+  id: AmenityId;
+  icon:
+    | "wifi"
+    | "car"
+    | "plane"
+    | "clock"
+    | "utensils"
+    | "sparkles"
+    | "washing-machine"
+    | "bell"
+    | "trees"
+    | "briefcase"
+    | "users"
+    | "ban"
+    | "coffee";
 };
 
-export const amenities: Amenity[] = [
-  { meta: "24/7", label: "Front Desk" },
-  { meta: "FREE", label: "Wi-Fi" },
-  { meta: "FREE", label: "Parking" },
-  { meta: "DAILY", label: "Housekeeping" },
-  { meta: "ON REQUEST", label: "Airport Transfer" },
-  { meta: "EVERY MORNING", label: "Breakfast" },
+export const featuredAmenities: Amenity[] = [
+  { id: "wifi", icon: "wifi" },
+  { id: "parking", icon: "car" },
+  { id: "shuttle", icon: "plane" },
+  { id: "front-desk", icon: "clock" },
+  { id: "breakfast", icon: "utensils" },
+  { id: "housekeeping", icon: "sparkles" },
+  { id: "laundry", icon: "washing-machine" },
+  { id: "room-service", icon: "bell" },
+  { id: "terrace", icon: "trees" },
+  { id: "baggage", icon: "briefcase" },
+  { id: "family", icon: "users" },
+  { id: "nonsmoking", icon: "ban" },
+  { id: "tea-coffee", icon: "coffee" },
 ];

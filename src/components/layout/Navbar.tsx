@@ -2,108 +2,85 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
+import type { Locale } from "@/lib/site-config";
+import { navItems, siteConfig } from "@/lib/site-config";
+import { getDictionary, localePath } from "@/lib/i18n";
+import { getLocaleFromPathname, stripLocale } from "@/lib/i18n/paths";
 import { cn } from "@/lib/cn";
 
-export function Navbar() {
+const navKeys = {
+  rooms: "rooms",
+  experience: "experience",
+  amenities: "amenities",
+  location: "location",
+  reviews: "reviews",
+  faq: "faq",
+} as const;
+
+export function Navbar({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
   const pathname = usePathname();
-  const hasPhotoHero = pathname === "/";
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [showLangNote, setShowLangNote] = useState(false);
-
-  const announceLang = () => {
-    setShowLangNote(true);
-    window.setTimeout(() => setShowLangNote(false), 2200);
-  };
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const solid = !hasPhotoHero || scrolled || open;
+  const current = stripLocale(pathname);
+  const otherLocale: Locale = locale === "en" ? "ar" : "en";
+  const langHref = localePath(otherLocale, current);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-colors duration-500",
-        solid
-          ? "border-b border-champagne/30 bg-ivory/95 backdrop-blur"
-          : "border-b border-transparent bg-transparent",
-      )}
-    >
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 md:px-10">
-        <Link
-          href="/"
-          className={cn(
-            "font-body text-sm font-semibold tracking-[0.28em] transition-colors duration-500",
-            solid ? "text-espresso" : "text-ivory",
-          )}
-        >
-          ROYAL SUITE
+    <header className="sticky top-0 z-50 border-b border-line bg-ivory">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <Link href={localePath(locale, "/")} className="min-w-0">
+          <span className="block font-display text-[1.35rem] leading-none text-espresso">
+            {t.brand.name}
+          </span>
+          <span className="mt-1 block font-sans text-[10px] uppercase tracking-[0.18em] text-gold">
+            {t.brand.city}
+          </span>
         </Link>
 
-        <nav
-          aria-label="Primary"
-          className={cn(
-            "hidden items-center gap-9 font-body text-[13px] uppercase tracking-[0.14em] transition-colors duration-500 md:flex",
-            solid ? "text-espresso" : "text-ivory",
-          )}
-        >
-          {siteConfig.nav.map((item) => (
+        <nav aria-label="Primary" className="hidden items-center gap-4 lg:flex xl:gap-6">
+          {navItems.map((item) => (
             <Link
-              key={item.href}
-              href={item.href}
-              className="opacity-80 transition-opacity hover:opacity-100"
+              key={item.id}
+              href={localePath(locale, item.href)}
+              className={cn(
+                "font-sans text-[13px] text-espresso/70 hover:text-espresso",
+                current === item.href || current.startsWith(`${item.href}/`)
+                  ? "text-espresso"
+                  : "",
+              )}
             >
-              {item.label}
+              {t.nav[navKeys[item.id]]}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-6 md:flex">
-          <div className="relative">
-            <button
-              type="button"
-              onClick={announceLang}
-              aria-label="Switch language"
-              className={cn(
-                "font-body text-[13px] tracking-[0.14em] transition-colors duration-500",
-                solid ? "text-espresso/70 hover:text-espresso" : "text-ivory/80 hover:text-ivory",
-              )}
-            >
-              EN / AR
-            </button>
-            {showLangNote && (
-              <p
-                role="status"
-                className="absolute right-0 top-full mt-3 w-max border border-champagne/40 bg-white px-3 py-2 font-body text-[11px] uppercase tracking-[0.1em] text-espresso/70 shadow-sm"
-              >
-                Arabic version coming soon
-              </p>
-            )}
-          </div>
-          <Link
-            href="/contact"
-            className={cn(
-              "rounded-[2px] px-6 py-2.5 font-body text-[12px] font-medium uppercase tracking-[0.16em] transition-colors duration-500",
-              solid
-                ? "bg-sage-deep text-ivory hover:bg-[#566153]"
-                : "border border-ivory/60 text-ivory hover:border-ivory hover:bg-ivory/10",
-            )}
+        <div className="hidden items-center gap-5 lg:flex">
+          <a
+            href={siteConfig.contact.phoneHref}
+            className="hidden font-sans text-[13px] text-espresso/75 hover:text-espresso xl:inline"
           >
-            Book Now
+            {siteConfig.contact.phone}
+          </a>
+          <Link
+            href={langHref}
+            hrefLang={otherLocale}
+            className="font-sans text-[12px] tracking-[0.08em] text-taupe hover:text-espresso"
+          >
+            {locale === "en" ? "EN / AR" : "ع / EN"}
+          </Link>
+          <Link
+            href={`${localePath(locale, "/rooms")}#availability`}
+            className="bg-walnut px-5 py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-paper hover:bg-walnut-deep"
+          >
+            {t.nav.checkAvailability}
           </Link>
         </div>
 
         <button
           type="button"
-          className={cn("md:hidden", solid ? "text-espresso" : "text-ivory")}
+          className="lg:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
@@ -112,48 +89,39 @@ export function Navbar() {
         </button>
       </div>
 
-      {open && (
-        <div className="border-t border-champagne/30 bg-ivory px-6 pb-10 pt-6 md:hidden">
-          <nav aria-label="Mobile" className="flex flex-col gap-6">
-            {siteConfig.nav.map((item) => (
+      {open ? (
+        <div className="border-t border-line bg-ivory px-4 py-5 lg:hidden">
+          <nav aria-label="Mobile" className="flex flex-col gap-3">
+            {navItems.map((item) => (
               <Link
-                key={item.href}
-                href={item.href}
+                key={item.id}
+                href={localePath(locale, item.href)}
                 onClick={() => setOpen(false)}
-                className="font-display text-3xl text-espresso"
+                className="font-sans text-lg text-espresso"
               >
-                {item.label}
+                {t.nav[navKeys[item.id]]}
               </Link>
             ))}
           </nav>
-          <div className="mt-8 flex items-center justify-between border-t border-champagne/30 pt-6">
-            <div>
-              <button
-                type="button"
-                onClick={announceLang}
-                className="font-body text-[13px] uppercase tracking-[0.14em] text-espresso/70"
-              >
-                EN / AR
-              </button>
-              {showLangNote && (
-                <p
-                  role="status"
-                  className="mt-2 font-body text-[11px] uppercase tracking-[0.1em] text-espresso/50"
-                >
-                  Arabic version coming soon
-                </p>
-              )}
-            </div>
+          <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
+            <Link href={langHref} className="font-sans text-sm text-taupe">
+              {locale === "en" ? "العربية" : "English"}
+            </Link>
             <Link
-              href="/contact"
+              href={`${localePath(locale, "/rooms")}#availability`}
               onClick={() => setOpen(false)}
-              className="rounded-[2px] bg-sage-deep px-6 py-3 font-body text-[12px] font-medium uppercase tracking-[0.16em] text-ivory"
+              className="bg-walnut px-5 py-2.5 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-paper"
             >
-              Book Now
+              {t.nav.checkAvailability}
             </Link>
           </div>
         </div>
-      )}
+      ) : null}
     </header>
   );
+}
+
+export function LocaleFromPath() {
+  const pathname = usePathname();
+  return getLocaleFromPathname(pathname);
 }

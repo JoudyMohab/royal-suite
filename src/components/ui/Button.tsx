@@ -1,45 +1,40 @@
-import Link from "next/link";
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 const base =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[2px] px-7 py-3.5 font-body text-[12px] font-medium uppercase tracking-[0.16em] transition-colors duration-300 focus-visible:outline-offset-4";
+  "inline-flex items-center justify-center gap-2 rounded-[2px] px-6 py-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors duration-200";
 
 const variants = {
-  primary: "bg-sage-deep text-ivory hover:bg-[#566153]",
-  walnut: "bg-walnut text-ivory hover:bg-[#59392e]",
-  inverse: "bg-ivory text-espresso hover:bg-white",
-  "on-photo": "border border-ivory/50 text-ivory hover:border-ivory hover:bg-ivory/10",
-  secondary: "border border-espresso/25 text-espresso hover:border-espresso/60",
-  ghost: "text-espresso/80 hover:text-walnut",
+  primary: "bg-walnut text-paper hover:bg-walnut-deep",
+  secondary: "border border-champagne bg-transparent text-espresso hover:bg-cream",
+  outline: "border border-espresso/30 text-espresso hover:border-espresso",
+  inverse: "bg-paper text-espresso hover:bg-ivory",
+  ghost: "text-espresso hover:text-walnut",
 } as const;
 
-type Variant = keyof typeof variants;
+type ButtonProps = React.ComponentProps<"a"> &
+  React.ComponentProps<"button"> & {
+    variant?: keyof typeof variants;
+    href?: string;
+  };
 
-type ButtonProps = {
-  variant?: Variant;
-  className?: string;
-  href?: string;
-} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> &
-  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className">;
-
-export function Button({ variant = "primary", className, href, ...rest }: ButtonProps) {
+export function Button({
+  variant = "primary",
+  className,
+  href,
+  children,
+  ...rest
+}: ButtonProps) {
   const classes = cn(base, variants[variant], className);
-
   if (href) {
     return (
-      <Link
-        href={href}
-        className={classes}
-        {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
-      />
+      <a href={href} className={classes} {...(rest as React.ComponentProps<"a">)}>
+        {children}
+      </a>
     );
   }
-
   return (
-    <button
-      className={classes}
-      {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}
-    />
+    <button className={classes} {...(rest as React.ComponentProps<"button">)}>
+      {children}
+    </button>
   );
 }

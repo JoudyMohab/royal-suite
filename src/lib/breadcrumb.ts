@@ -1,6 +1,10 @@
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, type Locale } from "@/lib/site-config";
+import { localePath } from "@/lib/i18n";
 
-export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
+export function breadcrumbJsonLd(
+  items: { name: string; path: string }[],
+  locale: Locale = "en",
+) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -8,7 +12,7 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${siteConfig.url}${item.path}`,
+      item: `${siteConfig.url}${localePath(locale, item.path)}`,
     })),
   };
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { LocationBlock } from "@/components/hotel/LocationBlock";
-import { Shuttle } from "@/components/hotel/Shuttle";
+import { ReviewsBlock } from "@/components/hotel/ReviewsBlock";
 import { BookingCta } from "@/components/hotel/BookingCta";
 import { getDictionary, localePath } from "@/lib/i18n";
 import { breadcrumbJsonLd, JsonLd } from "@/lib/seo";
@@ -10,16 +9,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
   const t = getDictionary(locale);
   return {
-    title: t.meta.locationTitle,
-    description: t.meta.locationDescription,
+    title: t.meta.reviewsTitle,
+    description: t.meta.reviewsDescription,
     alternates: {
-      canonical: localePath(locale, "/location"),
-      languages: { en: "/location", ar: "/ar/location" },
+      canonical: localePath(locale, "/reviews"),
+      languages: { en: "/reviews", ar: "/ar/reviews" },
     },
   };
 }
 
-export default async function LocationPage() {
+export default async function ReviewsPage() {
   const locale = await getRequestLocale();
   const t = getDictionary(locale);
   return (
@@ -28,13 +27,12 @@ export default async function LocationPage() {
         data={breadcrumbJsonLd(
           [
             { name: t.nav.home, path: "/" },
-            { name: t.nav.location, path: "/location" },
+            { name: t.nav.reviews, path: "/reviews" },
           ],
           locale,
         )}
       />
-      <LocationBlock locale={locale} headingLevel="h1" />
-      <Shuttle locale={locale} />
+      <ReviewsBlock locale={locale} headingLevel="h1" showLink={false} />
       <BookingCta locale={locale} />
     </>
   );

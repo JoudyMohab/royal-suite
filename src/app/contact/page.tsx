@@ -1,77 +1,113 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/sections/PageHeader";
-import { LocationSection } from "@/components/sections/LocationSection";
-import { Reveal } from "@/components/ui/Reveal";
 import { siteConfig } from "@/lib/site-config";
-import { breadcrumbJsonLd } from "@/lib/breadcrumb";
+import { getDictionary, localePath } from "@/lib/i18n";
+import { breadcrumbJsonLd, JsonLd } from "@/lib/seo";
+import { AvailabilitySearch } from "@/components/booking/AvailabilitySearch";
+import { LocationBlock } from "@/components/hotel/LocationBlock";
+import { getRequestLocale } from "@/lib/locale";
 
-export const metadata: Metadata = {
-  title: "Contact | Royal Suite Hotel Cairo",
-  description:
-    "Get in touch with Royal Suite Hotel in Nasr City, Cairo, or find the property on the map ahead of your stay.",
-  alternates: { canonical: "/contact" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const t = getDictionary(locale);
+  return {
+    title: t.meta.contactTitle,
+    description: t.meta.contactDescription,
+    alternates: {
+      canonical: localePath(locale, "/contact"),
+      languages: { en: "/contact", ar: "/ar/contact" },
+    },
+  };
+}
 
-const jsonLd = breadcrumbJsonLd([
-  { name: "Home", path: "/" },
-  { name: "Contact", path: "/contact" },
-]);
-
-const contactRows = [
-  { label: "Address", value: `${siteConfig.address.line1}, ${siteConfig.address.line2}` },
-  { label: "Phone", value: "To be confirmed" },
-  { label: "WhatsApp", value: "To be confirmed" },
-  { label: "Email", value: "To be confirmed" },
-  { label: "Booking", value: "Online booking link coming soon" },
-];
-
-export default function ContactPage() {
+export default async function ContactPage() {
+  const locale = await getRequestLocale();
+  const t = getDictionary(locale);
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={breadcrumbJsonLd(
+          [
+            { name: t.nav.home, path: "/" },
+            { name: t.nav.contact, path: "/contact" },
+          ],
+          locale,
+        )}
       />
-      <PageHeader
-        eyebrow="Contact"
-        title="Get in touch."
-        description="Direct phone, WhatsApp and booking details will appear here as soon as Royal Suite Hotel confirms them. In the meantime, reach the hotel through Instagram."
-      />
-
-      <section className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-24">
-        <Reveal>
-          <dl className="divide-y divide-champagne/40 border-y border-champagne/40">
-            {contactRows.map((row) => (
-              <div
-                key={row.label}
-                className="flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:justify-between"
-              >
-                <dt className="font-body text-[12px] uppercase tracking-[0.16em] text-espresso/50">
-                  {row.label}
-                </dt>
-                <dd className="font-body text-base text-espresso">{row.value}</dd>
+      <section className="bg-ivory px-4 py-12 sm:px-6">
+        <div className="mx-auto grid max-w-[1280px] gap-12 lg:grid-cols-2">
+          <div>
+            <h1 className="font-display text-4xl text-espresso">{t.contact.title}</h1>
+            <p className="mt-4 font-sans text-[15px] leading-relaxed text-espresso/75">
+              {t.contact.body}
+            </p>
+            <dl className="mt-8 divide-y divide-line border-y border-line">
+              <div className="flex justify-between gap-4 py-4 font-sans text-sm">
+                <dt className="text-taupe">{t.footer.phone}</dt>
+                <dd>
+                  <a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a>
+                </dd>
               </div>
-            ))}
-            <div className="flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:justify-between">
-              <dt className="font-body text-[12px] uppercase tracking-[0.16em] text-espresso/50">
-                Instagram
-              </dt>
-              <dd className="font-body text-base text-espresso">
-                <a
-                  href={siteConfig.social.instagramUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="underline decoration-champagne underline-offset-4 hover:text-walnut"
-                >
-                  {siteConfig.social.instagram}
-                </a>
-              </dd>
-            </div>
-          </dl>
-        </Reveal>
+              <div className="flex justify-between gap-4 py-4 font-sans text-sm">
+                <dt className="text-taupe">{t.footer.whatsapp}</dt>
+                <dd>{t.footer.pending}</dd>
+              </div>
+              <div className="flex justify-between gap-4 py-4 font-sans text-sm">
+                <dt className="text-taupe">{t.footer.email}</dt>
+                <dd>{t.footer.pending}</dd>
+              </div>
+              <div className="flex justify-between gap-4 py-4 font-sans text-sm">
+                <dt className="text-taupe">Instagram</dt>
+                <dd>
+                  <a href={siteConfig.social.instagramUrl}>{siteConfig.social.instagram}</a>
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <form className="border border-line bg-cream p-6">
+            <label className="block">
+              <span className="label">{t.contact.formName}</span>
+              <input
+                name="name"
+                className="mt-2 w-full border border-line bg-ivory px-3 py-2 font-sans text-sm text-espresso outline-none"
+              />
+            </label>
+            <label className="mt-4 block">
+              <span className="label">{t.contact.formEmail}</span>
+              <input
+                type="email"
+                name="email"
+                className="mt-2 w-full border border-line bg-ivory px-3 py-2 font-sans text-sm text-espresso outline-none"
+              />
+            </label>
+            <label className="mt-4 block">
+              <span className="label">{t.contact.formDates}</span>
+              <input
+                name="dates"
+                className="mt-2 w-full border border-line bg-ivory px-3 py-2 font-sans text-sm text-espresso outline-none"
+              />
+            </label>
+            <label className="mt-4 block">
+              <span className="label">{t.contact.formMessage}</span>
+              <textarea
+                name="message"
+                rows={5}
+                className="mt-2 w-full border border-line bg-ivory px-3 py-2 font-sans text-sm text-espresso outline-none"
+              />
+            </label>
+            <p className="mt-4 font-sans text-[13px] text-taupe">{t.contact.formNote}</p>
+            <button
+              type="submit"
+              className="mt-6 bg-walnut px-6 py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-paper"
+            >
+              {t.contact.formSubmit}
+            </button>
+          </form>
+        </div>
+        <div className="mx-auto mt-12 max-w-[1280px]">
+          <AvailabilitySearch locale={locale} />
+        </div>
       </section>
-
-      <LocationSection showHeading={false} />
+      <LocationBlock locale={locale} />
     </>
   );
 }
