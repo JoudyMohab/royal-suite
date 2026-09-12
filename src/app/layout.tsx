@@ -31,6 +31,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
     default: `${siteConfig.name} | Nasr City, Cairo`,
+    template: "%s",
   },
   description:
     "Stay at Royal Suite Hotel in Nasr City, Cairo. Comfortable suites, free Wi-Fi, free parking, and a 24-hour front desk near City Stars and Cairo International Airport.",
