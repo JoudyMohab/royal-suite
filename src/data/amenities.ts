@@ -31,6 +31,12 @@ export type Amenity = {
     | "coffee";
 };
 
+/**
+ * Eight genuinely useful guest amenities.
+ * "Non-smoking rooms" removed — it is a property condition, not a selling point.
+ * "Tea & coffee" and "Family rooms" removed — they are already communicated
+ * via the room descriptions and features.
+ */
 export const featuredAmenities: Amenity[] = [
   { id: "wifi", icon: "wifi" },
   { id: "parking", icon: "car" },
@@ -40,9 +46,4 @@ export const featuredAmenities: Amenity[] = [
   { id: "housekeeping", icon: "sparkles" },
   { id: "laundry", icon: "washing-machine" },
   { id: "room-service", icon: "bell" },
-  { id: "terrace", icon: "trees" },
-  { id: "baggage", icon: "briefcase" },
-  { id: "family", icon: "users" },
-  { id: "nonsmoking", icon: "ban" },
-  { id: "tea-coffee", icon: "coffee" },
 ];
