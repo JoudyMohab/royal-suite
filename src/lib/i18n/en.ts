@@ -55,11 +55,8 @@ export const en = {
   hero: {
     kicker: "Royal Suite Hotel",
     place: "Nasr City · Cairo",
-    title1: "A refined stay",
-    title2: "in the heart of Cairo.",
-    body: "Eleven rooms in Nasr City, each with a kitchenette. Free Wi-Fi, free parking and a 24-hour front desk.",
+    title: "Stay in Cairo, comfortably.",
     cta: "Check Availability",
-    secondary: "Explore Rooms",
   },
   hotelIntro: {
     eyebrow: "The Hotel",
@@ -91,11 +88,11 @@ export const en = {
   rooms: {
     eyebrow: "Rooms & Suites",
     title: "Eleven rooms. Three occupancy types.",
-    homeTitle: "Choose a room that fits your stay.",
+    homeTitle: "Rooms & Suites",
     seeAll: "View all rooms",
     specs: "Room specifications",
     intro:
-      "Royal Suite has 11 rooms. Eight sleep two guests, two sleep three, and Room 204 sleeps five. Rates are date-dependent and are not listed as fixed prices.",
+      "A selection of comfortable rooms in Nasr City, Cairo. Each includes a kitchenette, washing machine and private bathroom.",
     viewRoom: "View Room",
     bookNow: "Book Now",
     guests: (n: number) => `Up to ${n} guests`,
@@ -113,9 +110,9 @@ export const en = {
     twoGuest: "Double Room",
     threeGuest: "Triple Room",
     family: "Family Suite",
-    twoGuestBody: "Eight rooms sleeping up to two guests — Rooms 101, 102, 103, 104, 107, 108, 201, 202.",
-    threeGuestBody: "Two rooms sleeping up to three guests — Rooms 105 and 203.",
-    familyBody: "One family suite sleeping up to five guests — Room 204.",
+    twoGuestBody: "Eight rooms for two guests. Each includes a kitchenette, washing machine and private bathroom.",
+    threeGuestBody: "Two rooms for up to three guests, with the same kitchenette and private bathroom included.",
+    familyBody: "The hotel's largest room — one suite for up to five guests, with a full kitchenette and sitting area.",
     verifiedNote:
       "Public listings describe kitchenettes, washing machines, private bathrooms, air conditioning, tea and coffee facilities, free Wi-Fi and a flat-screen TV. Balcony or terrace access is offered in selected rooms and is not claimed for every room until confirmed.",
     featureLabels: {

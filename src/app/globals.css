@@ -93,13 +93,14 @@ body {
   background: var(--line);
 }
 
+/* ─── Label / eyebrow ───────────────────────────────────── */
 .label {
   font-family: var(--font-manrope), "Manrope", sans-serif;
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--taupe);
 }
 
 details.hotel-details > summary {
@@ -125,26 +126,22 @@ input[type="email"] {
   }
 }
 
-/* ─── Scroll-reveal animations ─────────────────────────── */
+/* ─── Scroll-reveal ─────────────────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
-.reveal-delay-1 {
-  transition-delay: 120ms;
-}
-.reveal-delay-2 {
-  transition-delay: 220ms;
-}
-.reveal-delay-3 {
-  transition-delay: 340ms;
-}
+.reveal-delay-1 { transition-delay: 100ms; }
+.reveal-delay-2 { transition-delay: 200ms; }
+.reveal-delay-3 { transition-delay: 320ms; }
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
@@ -153,39 +150,40 @@ input[type="email"] {
   }
 }
 
-/* ─── Hero gradient overlay ─────────────────────────────── */
-.hero-gradient {
+/* ─── Hero: TWO LOCALIZED vignettes ─────────────────────── */
+/*
+ * Top vignette — covers only the upper 28% of the hero.
+ * Used solely so the hotel name label reads against the photo.
+ * The middle of the photograph is UNTOUCHED.
+ */
+.hero-top-vignette {
   background: linear-gradient(
-    to top,
-    rgba(46, 37, 33, 0.88) 0%,
-    rgba(46, 37, 33, 0.55) 30%,
-    rgba(46, 37, 33, 0.18) 58%,
-    transparent 80%
+    to bottom,
+    rgba(46, 37, 33, 0.44) 0%,
+    rgba(46, 37, 33, 0.14) 55%,
+    transparent 100%
   );
 }
 
-/* ─── Dark section base ──────────────────────────────────── */
-.section-dark {
-  background: var(--espresso);
-  color: var(--paper);
+/*
+ * Bottom vignette — covers only the lower 36% of the hero.
+ * Used so the short headline + CTA read against the photo.
+ * The middle of the photograph is UNTOUCHED.
+ */
+.hero-bottom-vignette {
+  background: linear-gradient(
+    to top,
+    rgba(46, 37, 33, 0.60) 0%,
+    rgba(46, 37, 33, 0.25) 50%,
+    transparent 100%
+  );
 }
 
-/* ─── Amenity list item ──────────────────────────────────── */
-.amenity-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(247, 243, 234, 0.1);
+/* ─── Booking bar ───────────────────────────────────────── */
+.booking-bar-field {
+  border-right: 1px solid var(--line);
+  padding: 0.875rem 1.25rem;
 }
-.amenity-row:last-child {
-  border-bottom: none;
-}
-
-/* ─── Editorial room row ─────────────────────────────────── */
-.room-row-divider {
-  border-top: 1px solid var(--line);
-}
-.room-row-divider:first-child {
-  border-top: none;
+.booking-bar-field:last-of-type {
+  border-right: none;
 }

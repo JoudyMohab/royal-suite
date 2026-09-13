@@ -1,18 +1,37 @@
-import Link from "next/link";
 import Image from "next/image";
 import type { Locale } from "@/lib/site-config";
-import { getDictionary, localePath } from "@/lib/i18n";
+import { getDictionary } from "@/lib/i18n";
 import { AvailabilitySearch } from "@/components/booking/AvailabilitySearch";
 import { photos } from "@/data/photos";
 
+/**
+ * ARCHITECTURAL PRINCIPLE:
+ *
+ * The photograph is not a background for text.
+ * It is the photograph — the primary visual experience.
+ *
+ * The hotel identity label is the ONLY element inside the photograph.
+ * It is small (9px), placed in the corner, and barely visible.
+ *
+ * The editorial headline ("Stay in Cairo, comfortably.") lives BELOW
+ * the photograph in a thin ivory caption strip — like a magazine
+ * caption. It does not compete with the room imagery.
+ *
+ * The photograph has only a minimal top gradient (20% of height),
+ * purely so the hotel name label reads against the sky/ceiling.
+ * The remaining 80% of the photograph is completely unobstructed.
+ */
 export function Hero({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
   const isRtl = locale === "ar";
 
   return (
     <section>
-      {/* ─── Full-bleed cinematic photograph ────────────────── */}
-      <div className="relative min-h-[92vh]">
+      {/* ─── The photograph ────────────────────────────────────────────── */}
+      {/* No overlay in the center. No gradient at the bottom.            */}
+      {/* The room light, the furniture, the warm ivory walls — these are */}
+      {/* what make a visitor want to stay. Let them be seen.             */}
+      <div className="relative h-[78vh] md:h-[83vh]">
         <Image
           src={photos.hero.src}
           alt={photos.hero.alt}
@@ -22,66 +41,61 @@ export function Hero({ locale }: { locale: Locale }) {
           className="object-cover object-center"
         />
 
-        {/* Deep gradient — strong at bottom-left where text sits */}
-        <div className="hero-gradient absolute inset-0" aria-hidden />
-
-        {/* Editorial text composition */}
+        {/* Minimal top gradient — sole purpose: hotel label readability */}
+        {/* The remaining 80% of the photograph is untouched.           */}
         <div
-          className={`absolute inset-x-0 bottom-0 px-5 pb-12 sm:px-8 sm:pb-16 lg:px-14 lg:pb-20 ${isRtl ? "text-right" : ""}`}
+          className="pointer-events-none absolute inset-x-0 top-0 h-[20%]"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(46,37,33,0.42) 0%, transparent 100%)",
+          }}
+          aria-hidden
+        />
+
+        {/* Hotel identity — corner label only */}
+        <div
+          className={`absolute top-5 sm:top-7 lg:top-9 ${
+            isRtl
+              ? "right-5 sm:right-8 lg:right-14 text-right"
+              : "left-5 sm:left-8 lg:left-14"
+          }`}
         >
-          {/* Hotel name — small label */}
-          <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-champagne/80">
+          <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.24em] text-paper/60">
             {t.hero.kicker}
           </p>
-          <p className="mt-1 font-sans text-[9px] font-medium uppercase tracking-[0.18em] text-paper/45">
+          <p className="mt-0.5 font-sans text-[8px] uppercase tracking-[0.20em] text-paper/35">
             {t.hero.place}
           </p>
-
-          {/* Main editorial headline — truly large */}
-          <h1
-            className={`mt-5 font-display font-medium leading-[0.97] text-paper
-              text-[2.8rem]
-              sm:text-[4rem]
-              md:text-[5rem]
-              lg:text-[6.5rem]
-              xl:text-[7.5rem]
-              max-w-[20ch] lg:max-w-none`}
-          >
-            {t.hero.title1}
-            <br />
-            {t.hero.title2}
-          </h1>
-
-          {/* Sub-line + CTAs */}
-          <div
-            className={`mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6 ${isRtl ? "items-end sm:flex-row-reverse sm:justify-end" : ""}`}
-          >
-            <div className={`flex gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
-              <a
-                href="#availability"
-                className="inline-block bg-champagne px-7 py-3.5 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-espresso transition-colors hover:bg-champagne/85"
-              >
-                {t.hero.cta}
-              </a>
-              <Link
-                href={localePath(locale, "/rooms")}
-                className="inline-block border border-paper/35 px-7 py-3.5 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-paper/85 transition-colors hover:border-paper/65 hover:text-paper"
-              >
-                {t.hero.secondary}
-              </Link>
-            </div>
-            <p className="font-sans text-[12px] leading-relaxed text-paper/55 sm:max-w-[280px]">
-              {t.hero.body}
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* ─── Availability bar — refined hotel reservation form ── */}
-      <div id="availability" className="border-b border-champagne/40 bg-ivory">
-        <div className="mx-auto max-w-[1280px]">
-          <AvailabilitySearch locale={locale} variant="hero" />
-        </div>
+      {/* ─── Caption strip — OUTSIDE and BELOW the photograph ─────────── */}
+      {/* This is not a CTA bar. It is an editorial caption, like the    */}
+      {/* line of text beneath a photograph in a hotel brochure.         */}
+      {/* The Bodoni italic at this scale feels like a byline, not       */}
+      {/* a slogan. It frames the experience rather than selling it.     */}
+      <div
+        className={`flex items-center justify-between gap-6 border-b border-line bg-ivory px-5 py-4 sm:px-8 lg:px-14 ${
+          isRtl ? "flex-row-reverse" : ""
+        }`}
+      >
+        <h1
+          className={`font-display font-medium italic leading-tight text-espresso
+            text-[1.15rem] sm:text-[1.35rem]`}
+        >
+          {t.hero.title}
+        </h1>
+        <a
+          href="#availability"
+          className="shrink-0 border border-espresso/25 px-5 py-2.5 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-espresso transition-colors hover:border-espresso hover:bg-espresso hover:text-paper"
+        >
+          {t.hero.cta}
+        </a>
+      </div>
+
+      {/* ─── Booking form ──────────────────────────────────────────────── */}
+      <div id="availability" className="border-b border-line bg-cream">
+        <AvailabilitySearch locale={locale} variant="hero" />
       </div>
     </section>
   );

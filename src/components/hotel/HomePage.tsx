@@ -1,32 +1,63 @@
 /**
- * Homepage composition.
+ * HOMEPAGE COMPOSITION — 7 chapters
  *
- * Visual rhythm intentionally designed as:
+ * Previous structure (12 independent sections):
+ *   Hero → Hotel Intro → Rooms → MoreThanARoom → Amenities →
+ *   Hotel Info → Shuttle → Location → Reviews → FAQ → Gallery → CTA
  *
- * 1. Hero         — full-bleed photography, massive type  (no background)
- * 2. Booking bar  — ivory                                 (light)
- * 3. Hotel Intro  — ivory, full-bleed split photo+text    (light)
- * 4. Rooms        — paper/off-white, editorial catalogue  (light)
- * 5. "More Than"  — ESPRESSO dark                        (dark)
- * 6. Amenities    — ESPRESSO dark, photo + list           (dark) ← continues dark
- * 7. Shuttle      — ivory, full-bleed split               (light)
- * 8. Location     — cream                                 (light)
- * 9. Reviews      — paper                                 (light)
- * 10. FAQ         — ivory                                 (light)
- * 11. Gallery     — paper                                 (light)
- * 12. CTA         — WALNUT DEEP dark                      (dark)
+ * The problem: each section behaved as an independent UI component.
+ * The result: a stack of unrelated sections, not a hotel experience.
  *
- * Light → DARK (two-section block) → Light → Light → Light → DARK
+ * New structure (7 intentional chapters):
+ *
+ *   CHAPTER 01 · ARRIVAL
+ *     Hero — photograph as primary visual, editorial caption below it
+ *
+ *   CHAPTER 02 · THE HOTEL
+ *     HotelIntroduction — editorial spread, trust signal integrated
+ *
+ *   CHAPTER 03 · ROOMS & SUITES
+ *     RoomsPreview — asymmetric catalogue, no equal cards
+ *
+ *   CHAPTER 04 · THE STAY
+ *     TheStay — merges MoreThanARoom + FeaturedAmenities
+ *     Ivory background (previously two consecutive dark sections)
+ *
+ *   CHAPTER 05 · CAIRO
+ *     CairoChapter — merges LocationBlock + Shuttle
+ *     One geographic narrative: where we are, how to arrive
+ *
+ *   CHAPTER 06 · GUEST REVIEWS
+ *     ReviewsBlock — credibility, not a dashboard
+ *
+ *   CHAPTER 07 · GALLERY + FINAL BOOKING
+ *     Gallery strip → BookingCta (photographic close)
+ *
+ *   FAQ — quiet, near the bottom, not a visual chapter
+ *
+ * Section backgrounds:
+ *   Hero:              none (photograph)
+ *   Caption strip:     ivory
+ *   HotelIntro:        ivory
+ *   Rooms:             paper
+ *   TheStay:           ivory  ← previously espresso
+ *   CairoChapter:      cream
+ *   Reviews:           paper
+ *   Gallery:           paper
+ *   CTA:               photograph
+ *   FAQ:               ivory
+ *
+ * Light → Light → Light/paper → IVORY → cream → Light → Light → photo
+ *
+ * The dark espresso block is gone. The page lives in warm ivory and
+ * cream, with the photography providing the visual drama.
  */
 
 import { Hero } from "@/components/hotel/Hero";
 import { HotelIntroduction } from "@/components/hotel/HotelIntroduction";
 import { RoomsPreview } from "@/components/hotel/RoomsPreview";
-import { MoreThanARoom } from "@/components/hotel/MoreThanARoom";
-import { FeaturedAmenities } from "@/components/hotel/FeaturedAmenities";
-import { HotelInformation } from "@/components/hotel/HotelInformation";
-import { Shuttle } from "@/components/hotel/Shuttle";
-import { LocationBlock } from "@/components/hotel/LocationBlock";
+import { TheStay } from "@/components/hotel/TheStay";
+import { CairoChapter } from "@/components/hotel/CairoChapter";
 import { ReviewsBlock } from "@/components/hotel/ReviewsBlock";
 import { FaqBlock } from "@/components/hotel/FaqBlock";
 import { InstagramStrip } from "@/components/hotel/GalleryBlock";
@@ -36,41 +67,39 @@ import type { Locale } from "@/lib/site-config";
 export function HomePage({ locale }: { locale: Locale }) {
   return (
     <>
-      {/* 1 — PHOTOGRAPHY · editorial headline */}
+      {/* CHAPTER 01 — ARRIVAL */}
+      {/* Photograph first. Editorial caption below it. Booking form. */}
       <Hero locale={locale} />
 
-      {/* 2 — THE HOTEL · photo + copy + facts */}
+      {/* CHAPTER 02 — THE HOTEL */}
+      {/* Editorial spread with trust signal. Headline 2.75rem max.  */}
       <HotelIntroduction locale={locale} />
 
-      {/* 3 — ROOMS · hotel catalogue */}
+      {/* CHAPTER 03 — ROOMS & SUITES */}
+      {/* Luxury catalogue. Asymmetric proportions. No equal cards.  */}
       <RoomsPreview locale={locale} variant="home" />
 
-      {/* 4 — MORE THAN A ROOM · dark espresso */}
-      <MoreThanARoom locale={locale} />
+      {/* CHAPTER 04 — THE STAY */}
+      {/* What's included. Warm ivory. One section, not two.         */}
+      {/* Previously: MoreThanARoom (dark) + FeaturedAmenities (dark) */}
+      <TheStay locale={locale} />
 
-      {/* 5 — AMENITIES · dark espresso + photo list (continues dark) */}
-      <FeaturedAmenities locale={locale} />
+      {/* CHAPTER 05 — CAIRO */}
+      {/* Location + arrival in one geographic narrative.            */}
+      {/* Previously: LocationBlock + Shuttle as separate sections.  */}
+      <CairoChapter locale={locale} />
 
-      {/* 6 — PRACTICAL DETAILS · light information strip */}
-      <HotelInformation locale={locale} />
-
-      {/* 7 — ARRIVE WITH EASE · shuttle */}
-      <Shuttle locale={locale} />
-
-      {/* 8 — LOCATION · A home in Nasr City */}
-      <LocationBlock locale={locale} />
-
-      {/* 9 — REVIEWS · editorial score */}
+      {/* CHAPTER 06 — GUEST REVIEWS */}
+      {/* 9.4/10 editorial. Booking.com credibility.                */}
       <ReviewsBlock locale={locale} />
 
-      {/* 10 — FAQ */}
-      <FaqBlock locale={locale} />
-
-      {/* 11 — GALLERY STRIP */}
+      {/* CHAPTER 07 — GALLERY + FINAL BOOKING */}
+      {/* Photography first. Minimal close.                         */}
       <InstagramStrip locale={locale} />
-
-      {/* 12 — CTA · dark walnut close */}
       <BookingCta locale={locale} />
+
+      {/* FAQ — quiet, near the bottom, not a visual chapter */}
+      <FaqBlock locale={locale} />
     </>
   );
 }

@@ -1,35 +1,46 @@
 import Link from "next/link";
-import { Star } from "lucide-react";
 import type { Locale } from "@/lib/site-config";
 import { getDictionary, localePath } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site-config";
 
+/**
+ * Ultra-thin utility strip above the navigation.
+ * Communicates rating, address, and a single link.
+ * Nothing here should draw the eye before the hotel photograph.
+ */
 export function TrustBar({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
   const { reviews, address } = siteConfig;
+  const isRtl = locale === "ar";
 
   return (
-    <div className="border-b border-line bg-cream">
-      <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-2 sm:px-6">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-          <p className="flex items-baseline gap-2">
-            <span className="font-display text-[1.55rem] leading-none">{reviews.score.toFixed(1)}</span>
-            <span className="font-sans text-[11px] text-taupe">{t.trust.outOf}</span>
-            <span className="font-display text-[1.05rem] italic">{reviews.label}</span>
+    <div className="border-b border-line/50 bg-ivory">
+      <div
+        className={`mx-auto flex max-w-[1280px] items-center justify-between gap-6 px-4 py-1.5 sm:px-6 ${isRtl ? "flex-row-reverse" : ""}`}
+      >
+        {/* Rating + address — left side */}
+        <div
+          className={`flex flex-wrap items-center gap-x-4 gap-y-0 ${isRtl ? "flex-row-reverse" : ""}`}
+        >
+          <p className="font-sans text-[10px] text-taupe/90">
+            <span className="font-semibold text-espresso/80">
+              {reviews.score.toFixed(1)} / 10
+            </span>
+            {" · "}
+            <span>{reviews.label}</span>
+            {" · "}
+            <span className="text-taupe/65">{t.trust.reviews}</span>
           </p>
-          <p className="font-sans text-[12px] text-taupe">{t.trust.reviews}</p>
-          <p className="hidden items-center gap-0.5 text-gold sm:flex" aria-label={t.trust.stars}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={12} fill="currentColor" strokeWidth={0} />
-            ))}
-          </p>
-          <p className="font-sans text-[12px] text-espresso/80">
+          <span className="hidden h-2.5 w-px bg-line sm:block" aria-hidden />
+          <p className="hidden font-sans text-[10px] text-taupe/60 sm:block">
             {address.line1} · {address.line2}
           </p>
         </div>
+
+        {/* View reviews — right side */}
         <Link
           href={localePath(locale, "/reviews")}
-          className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-walnut hover:text-walnut-deep"
+          className="shrink-0 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-taupe/70 hover:text-espresso"
         >
           {t.trust.viewReviews}
         </Link>
