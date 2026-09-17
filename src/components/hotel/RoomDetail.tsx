@@ -21,13 +21,13 @@ export function RoomDetail({ locale, room }: { locale: Locale; room: Room }) {
         />
         <div className="flex flex-col justify-end bg-cream px-5 py-10 sm:px-8 lg:px-10">
           <p className="label">{t.rooms.eyebrow}</p>
-          <h1 className="mt-3 font-display text-4xl text-espresso md:text-5xl">
+          <h1 className="display-heading mt-3 text-[2.1rem] leading-[1.08] text-espresso md:text-[2.6rem]">
             {t.rooms.room(room.number)}
           </h1>
           <p className="mt-3 font-sans text-sm text-taupe">
             {t.rooms.guests(room.maxGuests)} · {t.rooms.floor(room.floor)}
           </p>
-          <p className="mt-6 font-sans text-[15px] text-espresso/80">{t.rooms.availabilityUnknown}</p>
+          <p className="mt-6 font-sans text-[14px] text-espresso/80">{t.booking.selectDates}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#availability"
@@ -47,7 +47,7 @@ export function RoomDetail({ locale, room }: { locale: Locale; room: Room }) {
 
       <div className="mx-auto mt-12 grid max-w-[1280px] gap-12 px-4 sm:px-6 lg:grid-cols-2">
         <div>
-          <h2 className="font-display text-2xl text-espresso">{t.rooms.features}</h2>
+          <h2 className="display-heading text-[1.4rem] text-espresso">{t.rooms.features}</h2>
           <ul className="mt-4 grid gap-2 sm:grid-cols-2">
             {room.features.map((feature) => (
               <li
@@ -63,34 +63,34 @@ export function RoomDetail({ locale, room }: { locale: Locale; room: Room }) {
           </p>
         </div>
         <div className="border border-line bg-paper p-6">
-          <h2 className="font-display text-2xl text-espresso">{t.rooms.rateOptions}</h2>
+          <h2 className="display-heading text-[1.4rem] text-espresso">{t.rooms.rateOptions}</h2>
           <p className="mt-4 font-sans text-sm leading-relaxed text-espresso/80">
-            {t.rooms.availabilityUnknown}
+            {t.rooms.ratesPlaceholder}
           </p>
-          <p className="mt-3 font-sans text-sm leading-relaxed text-espresso/80">
+          <p className="mt-3 font-sans text-sm leading-relaxed text-espresso/70">
             {t.rooms.cancellation}
           </p>
-          <p className="mt-3 font-sans text-sm leading-relaxed text-espresso/80">
+          <p className="mt-3 font-sans text-sm leading-relaxed text-espresso/70">
             {t.rooms.breakfast}
           </p>
         </div>
       </div>
 
       <div className="mx-auto mt-12 max-w-[1280px] px-4 sm:px-6">
-        <h2 className="font-display text-2xl text-espresso">{t.rooms.gallery}</h2>
+        <h2 className="display-heading text-[1.4rem] text-espresso">{t.rooms.gallery}</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {gallery.map((photo) => (
             <HotelPhoto
               key={photo.src}
               photo={photo}
-              alt={`${t.rooms.room(room.number)}`}
+              alt={photo.alt}
               className="aspect-[4/3]"
               sizes="(min-width: 1024px) 25vw, 50vw"
             />
           ))}
         </div>
-        <div className="mt-10">
-          <AvailabilitySearch locale={locale} formId="availability" />
+        <div id="availability" className="mt-10 scroll-mt-24">
+          <AvailabilitySearch locale={locale} />
         </div>
       </div>
     </article>

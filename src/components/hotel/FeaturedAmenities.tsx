@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Locale } from "@/lib/site-config";
 import { featuredAmenities } from "@/data/amenities";
+import { amenityIcons } from "@/components/hotel/amenity-icons";
 import { getDictionary } from "@/lib/i18n";
 import { photos } from "@/data/photos";
 import { Reveal } from "@/components/ui/Reveal";
@@ -19,7 +20,7 @@ export function FeaturedAmenities({ locale }: { locale: Locale }) {
   const isRtl = locale === "ar";
 
   return (
-    <section id="amenities" className="bg-espresso overflow-hidden">
+    <section id="amenities" className="bg-ivory overflow-hidden">
       <div className={`grid lg:grid-cols-[1fr_1fr] ${isRtl ? "lg:grid-flow-dense" : ""}`}>
 
         {/* ─── Photograph ──────────────────────────────────── */}
@@ -42,13 +43,8 @@ export function FeaturedAmenities({ locale }: { locale: Locale }) {
           }`}
         >
           <Reveal>
-            <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.22em] text-champagne/55">
-              {t.amenities.eyebrow}
-            </p>
-            <h2
-              className={`mt-4 font-display font-medium italic leading-[1.1] text-paper
-                text-[1.85rem] sm:text-[2.2rem] lg:text-[2.5rem]`}
-            >
+            <p className="label">{t.amenities.eyebrow}</p>
+            <h2 className="display-heading mt-4 text-[1.8rem] leading-[1.14] text-espresso sm:text-[2.2rem]">
               {t.amenities.title}
             </h2>
           </Reveal>
@@ -61,26 +57,33 @@ export function FeaturedAmenities({ locale }: { locale: Locale }) {
               {featuredAmenities.map((item, idx) => {
                 const copy = t.amenities.items[item.id];
                 const number = String(idx + 1).padStart(2, "0");
+                const Icon = amenityIcons[item.id];
                 return (
                   <li
                     key={item.id}
-                    className={`flex gap-5 border-t border-paper/10 py-4 first:border-t-0 ${
+                    className={`flex items-center gap-4 border-t border-line/70 py-4 first:border-t-0 ${
                       isRtl ? "flex-row-reverse" : ""
                     }`}
                   >
                     {/* Number */}
                     <span
-                      className="shrink-0 font-sans text-[10px] font-medium tabular-nums text-paper/30 mt-0.5"
+                      className="shrink-0 font-sans text-[10px] font-medium tabular-nums text-taupe/45"
                       aria-hidden
                     >
                       {number}
                     </span>
+                    {/* Icon */}
+                    <Icon
+                      className="h-[18px] w-[18px] shrink-0 text-walnut/70"
+                      strokeWidth={1.25}
+                      aria-hidden
+                    />
                     {/* Text */}
                     <div>
-                      <p className="font-sans text-[13px] font-medium leading-none text-paper/88">
+                      <p className="font-sans text-[13px] font-medium leading-none text-espresso/85">
                         {copy.title}
                       </p>
-                      <p className="mt-1 font-sans text-[11px] leading-relaxed text-paper/40">
+                      <p className="mt-1 font-sans text-[11px] leading-relaxed text-taupe/65">
                         {copy.text}
                       </p>
                     </div>

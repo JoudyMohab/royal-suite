@@ -65,20 +65,12 @@ export const siteConfig = {
       { id: "location", label: "Location", score: 8.9 },
       { id: "wifi", label: "Free Wi-Fi", score: 10.0 },
     ],
-    themes: [
-      "Friendly, helpful staff",
-      "Comfortable rooms",
-      "Cleanliness",
-      "Convenient Nasr City location",
-      "24-hour reception",
-      "Clear communication before check-in",
-    ],
   },
 
   nearby: [
     {
-      id: "city-stars",
-      distance: "4.6 km",
+      id: "sphinx-airport",
+      distance: "~70 km",
     },
     {
       id: "airport",

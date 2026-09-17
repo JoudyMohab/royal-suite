@@ -40,10 +40,10 @@ export default async function ExperiencePage() {
         <HotelPhoto photo={photos.frontDesk} className="min-h-[240px] border-0 p-0 lg:min-h-[300px]" />
         <div className="bg-cream px-4 py-10 sm:px-8">
           <p className="label">{t.nav.experience}</p>
-          <h1 className="mt-3 max-w-2xl font-display text-4xl text-espresso">
+          <h1 className="display-heading mt-3 max-w-[22ch] text-[1.9rem] leading-[1.12] text-espresso sm:text-[2.3rem]">
             {t.experience.title}
           </h1>
-          <p className="mt-4 max-w-2xl font-sans text-[15px] leading-relaxed text-espresso/75">
+          <p className="mt-4 max-w-2xl font-sans text-[14px] leading-relaxed text-espresso/70">
             {t.experience.body}
           </p>
         </div>

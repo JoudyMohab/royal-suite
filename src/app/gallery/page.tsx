@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GalleryBlock } from "@/components/hotel/GalleryBlock";
+import { GalleryLightbox } from "@/components/hotel/GalleryLightbox";
 import { BookingCta } from "@/components/hotel/BookingCta";
 import { getDictionary, localePath } from "@/lib/i18n";
 import { breadcrumbJsonLd, JsonLd } from "@/lib/seo";
@@ -32,7 +32,22 @@ export default async function GalleryPage() {
           locale,
         )}
       />
-      <GalleryBlock locale={locale} headingLevel="h1" />
+      <section className="bg-cream px-6 pb-12 pt-14 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1280px]">
+          <p className="label">{t.gallery.eyebrow}</p>
+          <h1 className="display-heading mt-3 text-[1.9rem] leading-[1.12] text-espresso sm:text-[2.35rem]">
+            {t.gallery.title}
+          </h1>
+          <p className="mt-4 max-w-2xl font-sans text-[13px] leading-relaxed text-espresso/60">
+            {t.gallery.intro}
+          </p>
+        </div>
+      </section>
+      <section className="bg-paper px-6 py-12 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1280px]">
+          <GalleryLightbox locale={locale} />
+        </div>
+      </section>
       <BookingCta locale={locale} />
     </>
   );

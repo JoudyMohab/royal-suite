@@ -1,21 +1,11 @@
 /**
- * CAIRO CHAPTER — Chapter 5 of the homepage.
+ * CAIRO CHAPTER — Chapter 05 of the homepage.
  *
- * This component replaces two separate homepage sections:
- *   LocationBlock  (cream, map + distances)
- *   Shuttle        (ivory, airport transfer)
- *
- * Both are the same story: "how to get to and around Cairo."
- * Telling it in two separate sections is redundant.
- *
- * This chapter tells it as one geographic narrative:
- *   1. Where we are in Cairo (headline + address)
+ * Location + airport arrival as one geographic story:
+ *   1. "Your base in Cairo" — where we are
  *   2. The map — the visual anchor
- *   3. What is nearby (distances)
- *   4. How to arrive (shuttle, integrated below the map)
- *
- * The original LocationBlock and Shuttle components are kept
- * for use on dedicated /location and /experience pages.
+ *   3. What is nearby — verified distances only
+ *   4. "Arrive with ease" — the airport shuttle, integrated
  */
 import Link from "next/link";
 import type { Locale } from "@/lib/site-config";
@@ -34,8 +24,7 @@ export function CairoChapter({ locale }: { locale: Locale }) {
 
   return (
     <section className="bg-cream" id="location">
-      <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-8 lg:px-14">
-
+      <div className="mx-auto max-w-[1280px] px-6 py-16 sm:px-10 lg:px-14 lg:py-24">
         {/* ─── Section heading ─────────────────────────────── */}
         <Reveal>
           <div
@@ -45,15 +34,12 @@ export function CairoChapter({ locale }: { locale: Locale }) {
           >
             <div className={isRtl ? "text-right" : ""}>
               <p className="label">{t.location.eyebrow}</p>
-              <h2
-                className={`mt-3 font-display font-medium italic leading-tight text-espresso
-                  text-[1.85rem] sm:text-[2.25rem] lg:text-[2.75rem]`}
-              >
+              <h2 className="display-heading mt-3 text-[1.9rem] leading-[1.12] text-espresso sm:text-[2.35rem]">
                 {t.location.title}
               </h2>
             </div>
             <address
-              className={`not-italic font-sans text-[12px] text-taupe leading-relaxed ${
+              className={`font-sans text-[12px] not-italic leading-relaxed text-taupe ${
                 isRtl ? "text-right" : ""
               }`}
             >
@@ -70,15 +56,15 @@ export function CairoChapter({ locale }: { locale: Locale }) {
             <iframe
               title={t.location.mapTitle}
               src={mapSrc}
-              className="h-[280px] w-full sm:h-[360px] md:h-[420px]"
+              className="h-[280px] w-full sm:h-[360px] md:h-[440px]"
               loading="lazy"
             />
           </div>
         </Reveal>
 
-        {/* ─── Distances ───────────────────────────────────── */}
+        {/* ─── Verified distances ──────────────────────────── */}
         <Reveal delay={80}>
-          <ul className="mt-0 grid border-x border-b border-line sm:grid-cols-3">
+          <ul className="grid border-x border-b border-line sm:grid-cols-3">
             {siteConfig.nearby.map((place, i) => (
               <li
                 key={place.id}
@@ -91,7 +77,7 @@ export function CairoChapter({ locale }: { locale: Locale }) {
                 <p className="label">
                   {t.location.nearby[place.id as keyof typeof t.location.nearby]}
                 </p>
-                <p className="mt-2 font-display font-medium leading-none text-espresso text-[2rem] sm:text-[2.25rem]">
+                <p className="mt-2 font-display text-[1.9rem] font-medium leading-none text-espresso sm:text-[2.15rem]">
                   {place.distance}
                 </p>
               </li>
@@ -99,53 +85,43 @@ export function CairoChapter({ locale }: { locale: Locale }) {
           </ul>
         </Reveal>
 
-        {/* ─── Airport transfer — integrated, not a separate section ── */}
-        {/* The shuttle is part of the arrival story, not a standalone  */}
-        {/* product. It belongs here, below the map and distances.      */}
+        {/* ─── Arrive with ease ────────────────────────────── */}
         <Reveal delay={100}>
-          <div
-            className={`mt-12 border-t border-line pt-10 ${isRtl ? "text-right" : ""}`}
-          >
+          <div className={`mt-14 border-t border-line pt-10 ${isRtl ? "text-right" : ""}`}>
             <p className="label">{t.shuttle.eyebrow}</p>
-
             <div
               className={`mt-4 flex flex-wrap items-start justify-between gap-8 ${
                 isRtl ? "flex-row-reverse" : ""
               }`}
             >
-              <div className="max-w-[44ch]">
-                <h3
-                  className={`font-display font-medium italic leading-tight text-espresso
-                    text-[1.5rem] sm:text-[1.85rem]`}
-                >
+              <div className="max-w-[46ch]">
+                <h3 className="display-heading text-[1.5rem] leading-tight text-espresso sm:text-[1.8rem]">
                   {t.shuttle.title}
                 </h3>
-                <p className="mt-3 font-sans text-[13px] leading-relaxed text-espresso/60">
+                <p className="mt-3 font-sans text-[13px] leading-[1.8] text-espresso/60">
                   {t.shuttle.body}
                 </p>
               </div>
-
               <Link
                 href={localePath(locale, "/contact") + "?subject=shuttle"}
-                className="shrink-0 border border-espresso/25 px-6 py-3 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-espresso transition-colors hover:border-espresso hover:bg-espresso hover:text-paper"
+                className="shrink-0 border border-espresso/30 px-6 py-3 font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-espresso transition-colors hover:border-espresso hover:bg-espresso hover:text-paper"
               >
                 {t.shuttle.request}
               </Link>
             </div>
 
-            {/* Quick facts — brief, no cards */}
             <ul
-              className={`mt-7 space-y-1.5 border-t border-line/50 pt-6 ${isRtl ? "text-right" : ""}`}
+              className={`mt-8 space-y-2 border-t border-line/60 pt-6 ${
+                isRtl ? "text-right" : ""
+              }`}
             >
-              <li>
-                <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.14em] text-taupe">
+              <li className="font-sans text-[12px] leading-relaxed text-espresso/60">
+                <span className="mr-3 font-sans text-[9px] font-semibold uppercase tracking-[0.14em] text-taupe">
                   {t.shuttle.paid}
                 </span>
-                <span className="ml-3 font-sans text-[13px] text-espresso/62">
-                  {t.shuttle.advance}
-                </span>
+                {t.shuttle.advance}
               </li>
-              <li className="font-sans text-[13px] text-espresso/55">
+              <li className="font-sans text-[12px] leading-relaxed text-espresso/55">
                 {t.shuttle.vehicle}
               </li>
             </ul>

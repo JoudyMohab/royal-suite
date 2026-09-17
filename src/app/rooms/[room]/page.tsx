@@ -5,6 +5,7 @@ import { RoomDetail } from "@/components/hotel/RoomDetail";
 import { getDictionary, localePath } from "@/lib/i18n";
 import { breadcrumbJsonLd, JsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
+import { roomPhotos } from "@/data/photos";
 import { getRequestLocale } from "@/lib/locale";
 
 export function generateStaticParams() {
@@ -49,7 +50,14 @@ export default async function RoomPage({
     "@context": "https://schema.org",
     "@type": "HotelRoom",
     name: t.rooms.room(room.number),
+    url: `${siteConfig.url}${localePath(locale, `/rooms/${room.slug}`)}`,
+    image: `${siteConfig.url}${roomPhotos(room.category)[0].src}`,
     occupancy: { "@type": "QuantitativeValue", maxValue: room.maxGuests },
+    amenityFeature: room.features.map((feature) => ({
+      "@type": "LocationFeatureSpecification",
+      name: t.rooms.featureLabels[feature as keyof typeof t.rooms.featureLabels],
+      value: true,
+    })),
     containedInPlace: { "@type": "Hotel", name: siteConfig.name },
   };
 

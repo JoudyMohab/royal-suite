@@ -1,0 +1,19 @@
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+⨯ ReferenceError: getDictionary is not defined
+    at Module.generateMetadata (src\app\layout.tsx:33:13)
+  31 |   const headerList = await headers();
+  32 |   const locale = (headerList.get("x-locale") === "ar" ? "ar" : "en") as Locale;
+> 33 |   const t = getDictionary(locale);
+     |             ^
+  34 |   return {
+  35 |     metadataBase: new URL(siteConfig.url),
+  36 |     title: { {
+  digest: '65833099'
+}
+⚠ Fast Refresh had to perform a full reload due to a runtime error.

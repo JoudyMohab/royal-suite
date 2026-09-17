@@ -1,101 +1,95 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Locale } from "@/lib/site-config";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, localePath } from "@/lib/i18n";
 import { AvailabilitySearch } from "@/components/booking/AvailabilitySearch";
 import { photos } from "@/data/photos";
 
 /**
- * ARCHITECTURAL PRINCIPLE:
+ * CHAPTER 01 — ARRIVAL
  *
- * The photograph is not a background for text.
- * It is the photograph — the primary visual experience.
+ * An opening spread, not a photograph with a slogan laid over it.
  *
- * The hotel identity label is the ONLY element inside the photograph.
- * It is small (9px), placed in the corner, and barely visible.
+ *   right — the photograph, full-bleed and untouched. No scrim, no
+ *           band, no type across the room. It is the first thing seen
+ *           and the largest element on the screen.
+ *   left  — the hotel's stationery: wordmark set as the page's single
+ *           H1, the city beneath it, a champagne hairline, one plain
+ *           sentence, and the booking action.
  *
- * The editorial headline ("Stay in Cairo, comfortably.") lives BELOW
- * the photograph in a thin ivory caption strip — like a magazine
- * caption. It does not compete with the room imagery.
- *
- * The photograph has only a minimal top gradient (20% of height),
- * purely so the hotel name label reads against the sky/ceiling.
- * The remaining 80% of the photograph is completely unobstructed.
+ * The reservation desk sits directly beneath the spread and spans both
+ * columns — the way a desk sits at the end of a lobby. Nothing here is
+ * wrapped in a scroll reveal: this is the first screen and must render
+ * with or without JavaScript.
  */
 export function Hero({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
   const isRtl = locale === "ar";
 
   return (
-    <section>
-      {/* ─── The photograph ────────────────────────────────────────────── */}
-      {/* No overlay in the center. No gradient at the bottom.            */}
-      {/* The room light, the furniture, the warm ivory walls — these are */}
-      {/* what make a visitor want to stay. Let them be seen.             */}
-      <div className="relative h-[78vh] md:h-[83vh]">
-        <Image
-          src={photos.hero.src}
-          alt={photos.hero.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
+    <section className="border-b border-line">
+      <div className="grid lg:grid-cols-[0.72fr_1.28fr]">
+        {/* ─── The photograph — untouched ───────────────────────────── */}
+        <div className="relative min-h-[52vh] overflow-hidden bg-cream lg:col-start-2 lg:row-start-1 lg:min-h-[clamp(500px,72vh,780px)]">
+          <Image
+            src={photos.hero.src}
+            alt={photos.hero.alt}
+            fill
+            priority
+            sizes="(min-width: 1024px) 64vw, 100vw"
+            className="object-cover object-center"
+          />
+        </div>
 
-        {/* Minimal top gradient — sole purpose: hotel label readability */}
-        {/* The remaining 80% of the photograph is untouched.           */}
+        {/* ─── The hotel's stationery ──────────────────────────────── */}
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-[20%]"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(46,37,33,0.42) 0%, transparent 100%)",
-          }}
-          aria-hidden
-        />
-
-        {/* Hotel identity — corner label only */}
-        <div
-          className={`absolute top-5 sm:top-7 lg:top-9 ${
-            isRtl
-              ? "right-5 sm:right-8 lg:right-14 text-right"
-              : "left-5 sm:left-8 lg:left-14"
+          className={`flex flex-col justify-center bg-ivory px-6 py-12 sm:px-10 lg:col-start-1 lg:row-start-1 lg:px-14 lg:py-16 xl:px-20 ${
+            isRtl ? "text-right" : ""
           }`}
         >
-          <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.24em] text-paper/60">
-            {t.hero.kicker}
+          <h1>
+            <span className="display-heading block text-[2.1rem] leading-[1.04] text-espresso sm:text-[2.6rem] lg:text-[2.7rem] xl:text-[3.1rem]">
+              {t.brand.full}
+            </span>
+            <span className="mt-4 block font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-taupe">
+              {t.hero.place}
+            </span>
+          </h1>
+
+          <div
+            className={`mt-8 h-px w-14 bg-champagne ${isRtl ? "ms-auto" : ""}`}
+            aria-hidden
+          />
+
+          <p className="mt-7 max-w-[32ch] font-sans text-[14px] leading-[1.85] text-espresso/65">
+            {t.hero.statement}
           </p>
-          <p className="mt-0.5 font-sans text-[8px] uppercase tracking-[0.20em] text-paper/35">
-            {t.hero.place}
-          </p>
+
+          {/*
+           * The booking action is the reservation desk directly below,
+           * and the header carries its own. This column therefore offers
+           * the other path a guest wants — the rooms themselves — so the
+           * first screen never shows the same label twice.
+           */}
+          <Link
+            href={localePath(locale, "/rooms")}
+            className="mt-9 inline-block w-max border border-espresso/35 px-6 py-3 font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-espresso transition-colors hover:border-espresso hover:bg-espresso hover:text-paper"
+          >
+            {t.rooms.seeAll}
+          </Link>
         </div>
       </div>
 
-      {/* ─── Caption strip — OUTSIDE and BELOW the photograph ─────────── */}
-      {/* This is not a CTA bar. It is an editorial caption, like the    */}
-      {/* line of text beneath a photograph in a hotel brochure.         */}
-      {/* The Bodoni italic at this scale feels like a byline, not       */}
-      {/* a slogan. It frames the experience rather than selling it.     */}
-      <div
-        className={`flex items-center justify-between gap-6 border-b border-line bg-ivory px-5 py-4 sm:px-8 lg:px-14 ${
-          isRtl ? "flex-row-reverse" : ""
-        }`}
-      >
-        <h1
-          className={`font-display font-medium italic leading-tight text-espresso
-            text-[1.15rem] sm:text-[1.35rem]`}
-        >
-          {t.hero.title}
-        </h1>
-        <a
-          href="#availability"
-          className="shrink-0 border border-espresso/25 px-5 py-2.5 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-espresso transition-colors hover:border-espresso hover:bg-espresso hover:text-paper"
-        >
-          {t.hero.cta}
-        </a>
-      </div>
-
-      {/* ─── Booking form ──────────────────────────────────────────────── */}
-      <div id="availability" className="border-b border-line bg-cream">
-        <AvailabilitySearch locale={locale} variant="hero" />
+      {/* ─── Reservation desk ───────────────────────────────────────── */}
+      <div id="availability" className="scroll-mt-24 border-t border-line bg-cream">
+        <div className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 lg:px-8">
+          <AvailabilitySearch locale={locale} />
+          <p
+            className={`mt-3 font-sans text-[11px] text-taupe ${isRtl ? "text-right" : ""}`}
+          >
+            {t.booking.selectDates}
+          </p>
+        </div>
       </div>
     </section>
   );

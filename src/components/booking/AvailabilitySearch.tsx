@@ -1,87 +1,98 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import type { Locale } from "@/lib/site-config";
 import { getDictionary, localePath } from "@/lib/i18n";
 
 type AvailabilitySearchProps = {
   locale: Locale;
-  variant?: "hero" | "page";
-  formId?: string;
   defaultValues?: {
     checkIn?: string;
     checkOut?: string;
     rooms?: string;
-    adults?: string;
-    children?: string;
+    guests?: string;
   };
 };
 
-const fieldWrap = "px-4 py-3";
-const labelClass = "label block";
-const inputClass =
-  "mt-1.5 w-full bg-transparent font-sans text-sm text-espresso outline-none";
-
+/**
+ * The reservation desk.
+ *
+ * Flat fields separated by hairlines, quiet uppercase labels, square
+ * corners. No pills, no shadows, no glass. Guests is a single field —
+ * internal occupancy math (adults/children) stays in the data layer.
+ *
+ * The desk deliberately carries no element id: several pages render
+ * more than one of these, and `#availability` is placed by each page on
+ * the wrapper of its own primary desk so the anchor is never duplicated.
+ */
 export function AvailabilitySearch({
   locale,
-  variant = "page",
-  formId,
   defaultValues,
 }: AvailabilitySearchProps) {
   const t = getDictionary(locale);
   const router = useRouter();
-  const [today, setToday] = useState("");
 
-  useEffect(() => {
-    setToday(new Date().toISOString().slice(0, 10));
-  }, []);
+  /**
+   * Server render and hydration must agree, so "today" is read from an
+   * external store: empty on the server, the real date on the client.
+   */
+  const emptyDate = "";
+  const today = useSyncExternalStore(
+    () => () => {},
+    () => new Date().toISOString().slice(0, 10),
+    () => emptyDate,
+  );
 
   return (
     <form
-      id={formId ?? (variant === "hero" ? "availability" : undefined)}
-      className={
-        variant === "hero"
-          ? "w-full bg-ivory sm:my-0 sm:border sm:border-champagne"
-          : "w-full border border-champagne bg-ivory"
-      }
+      className="w-full border border-line bg-ivory"
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const params = new URLSearchParams();
-        for (const key of ["checkIn", "checkOut", "rooms", "adults", "children"]) {
+        for (const key of ["checkIn", "checkOut", "rooms", "guests"]) {
           const value = String(data.get(key) ?? "");
           if (value) params.set(key, value);
         }
         router.push(`${localePath(locale, "/rooms")}?${params.toString()}#availability`);
       }}
     >
-      <div className="grid grid-cols-2 divide-x divide-y divide-line md:grid-cols-6 md:divide-y-0 rtl:divide-x-reverse">
-        <label className={fieldWrap}>
-          <span className={labelClass}>{t.booking.checkIn}</span>
+      <div className="grid grid-cols-2 md:grid-cols-5">
+        {/* Check-in */}
+        <label className="border-b border-e border-line px-4 py-3.5 md:border-b-0">
+          <span className="label block">{t.booking.checkIn}</span>
           <input
             type="date"
             name="checkIn"
             required
             min={today}
             defaultValue={defaultValues?.checkIn}
-            className={inputClass}
+            className="mt-1.5 w-full bg-transparent font-sans text-sm text-espresso outline-none"
           />
         </label>
-        <label className={fieldWrap}>
-          <span className={labelClass}>{t.booking.checkOut}</span>
+
+        {/* Check-out */}
+        <label className="border-b border-line px-4 py-3.5 md:border-b-0 md:border-e">
+          <span className="label block">{t.booking.checkOut}</span>
           <input
             type="date"
             name="checkOut"
             required
             min={today}
             defaultValue={defaultValues?.checkOut}
-            className={inputClass}
+            className="mt-1.5 w-full bg-transparent font-sans text-sm text-espresso outline-none"
           />
         </label>
-        <label className={fieldWrap}>
-          <span className={labelClass}>{t.booking.rooms}</span>
-          <select name="rooms" defaultValue={defaultValues?.rooms ?? "1"} className={inputClass}>
+
+        {/* Rooms */}
+        <label className="border-b border-e border-line px-4 py-3.5 md:border-b-0 rtl:border-e-0 rtl:border-s">
+          <span className="label block">{t.booking.rooms}</span>
+          <select
+            name="rooms"
+            defaultValue={defaultValues?.rooms ?? "1"}
+            className="mt-1.5 w-full bg-transparent font-sans text-sm text-espresso outline-none"
+          >
             {[1, 2, 3, 4].map((n) => (
               <option key={n} value={n}>
                 {n}
@@ -89,9 +100,15 @@ export function AvailabilitySearch({
             ))}
           </select>
         </label>
-        <label className={fieldWrap}>
-          <span className={labelClass}>{t.booking.adults}</span>
-          <select name="adults" defaultValue={defaultValues?.adults ?? "2"} className={inputClass}>
+
+        {/* Guests */}
+        <label className="border-b border-line px-4 py-3.5 md:border-b-0">
+          <span className="label block">{t.booking.guests}</span>
+          <select
+            name="guests"
+            defaultValue={defaultValues?.guests ?? "2"}
+            className="mt-1.5 w-full bg-transparent font-sans text-sm text-espresso outline-none"
+          >
             {[1, 2, 3, 4, 5].map((n) => (
               <option key={n} value={n}>
                 {n}
@@ -99,19 +116,11 @@ export function AvailabilitySearch({
             ))}
           </select>
         </label>
-        <label className={fieldWrap}>
-          <span className={labelClass}>{t.booking.children}</span>
-          <select name="children" defaultValue={defaultValues?.children ?? "0"} className={inputClass}>
-            {[0, 1, 2, 3, 4].map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </label>
+
+        {/* Submit */}
         <button
           type="submit"
-          className="col-span-2 bg-walnut px-4 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-paper hover:bg-walnut-deep md:col-span-1"
+          className="col-span-2 bg-espresso px-4 py-4 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-paper transition-colors hover:bg-walnut md:col-span-1"
         >
           {t.booking.submit}
         </button>

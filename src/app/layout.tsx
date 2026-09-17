@@ -5,6 +5,7 @@ import "./globals.css";
 import { siteConfig, type Locale } from "@/lib/site-config";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { hotelJsonLd, JsonLd } from "@/lib/seo";
+import { getDictionary } from "@/lib/i18n";
 
 const bodoni = Bodoni_Moda({
   variable: "--font-bodoni",
@@ -27,35 +28,48 @@ const plexArabic = IBM_Plex_Sans_Arabic({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: `${siteConfig.name} | Nasr City, Cairo`,
-    template: "%s",
-  },
-  description:
-    "Stay at Royal Suite Hotel in Nasr City, Cairo. Comfortable suites, free Wi-Fi, free parking, and a 24-hour front desk near City Stars and Cairo International Airport.",
-  alternates: {
-    canonical: "/",
-    languages: { en: "/", ar: "/ar" },
-  },
-  openGraph: {
-    type: "website",
-    locale: siteConfig.locale,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: "/images/royal-suite-family-suite.webp",
-        width: 1600,
-        height: 1200,
-        alt: "Royal Suite Hotel suite in Nasr City, Cairo",
-      },
-    ],
-  },
-  twitter: { card: "summary_large_image" },
-  icons: { icon: "/favicon.ico" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const headerList = await headers();
+  const locale = (headerList.get("x-locale") === "ar" ? "ar" : "en") as Locale;
+  const t = getDictionary(locale);
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      default: t.meta.homeTitle,
+      template: "%s",
+    },
+    description: t.meta.homeDescription,
+    alternates: {
+      canonical: "/",
+      languages: { en: "/", ar: "/ar" },
+    },
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: "website",
+      locale: locale === "ar" ? "ar_EG" : siteConfig.locale,
+      alternateLocale: locale === "ar" ? [siteConfig.locale] : ["ar_EG"],
+      url: siteConfig.url,
+      siteName: siteConfig.name,
+      title: t.meta.homeTitle,
+      description: t.meta.homeDescription,
+      images: [
+        {
+          url: "/images/royal-suite-family-suite.webp",
+          width: 1152,
+          height: 864,
+          alt: "Royal Suite Hotel — family suite with kitchenette in Nasr City, Cairo",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t.meta.homeTitle,
+      description: t.meta.homeDescription,
+      images: ["/images/royal-suite-family-suite.webp"],
+    },
+    icons: { icon: "/favicon.ico" },
+  };
+}
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const headerList = await headers();

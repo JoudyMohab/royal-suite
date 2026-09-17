@@ -1,124 +1,156 @@
 /**
- * THE STAY — Chapter 4 of the homepage.
+ * THE STAY — Chapter 04 of the homepage.
  *
- * This component replaces two separate homepage sections:
- *   MoreThanARoom  (dark espresso background)
- *   FeaturedAmenities  (dark espresso background)
+ * Replaces MoreThanARoom + FeaturedAmenities (two consecutive dark
+ * sections) with one warm chapter:
  *
- * Both existed independently and created a double-dark block in the
- * middle of the page — the "dark luxury template" pattern. They are
- * now a single editorial chapter on a warm ivory background.
+ *   Top:    kitchenette photograph + in-room features from verified
+ *           room data, as a typographic list with fine rules.
+ *   Bottom: services index beside the linen detail photograph —
+ *           numbered, no icons, no cards.
  *
- * Composition:
- *   Left:  room photograph — daylight suite, different from the
- *          living room photo used in HotelIntroduction.
- *   Right: what's included — short description, hotel stats,
- *          numbered service index.
- *
- * The numbered list ("01 Free Wi-Fi") was carried over from
- * FeaturedAmenities. It is simple, editorial, and functional.
- * No icons. No cards. No colourful grid.
- *
- * Non-smoking rooms is not in the amenities list. See amenities.ts.
+ * "Non-smoking rooms" is a property condition, not an amenity — it is
+ * not in the featured list. See amenities.ts.
  */
 import Image from "next/image";
 import type { Locale } from "@/lib/site-config";
 import { getDictionary } from "@/lib/i18n";
 import { photos } from "@/data/photos";
 import { featuredAmenities } from "@/data/amenities";
+import { amenityIcons, inRoomIcons } from "@/components/hotel/amenity-icons";
 import { Reveal } from "@/components/ui/Reveal";
+
+const inRoomFeatures = [
+  "kitchenette",
+  "washing-machine",
+  "bathroom",
+  "ac",
+  "wifi",
+  "tv",
+  "tea-coffee",
+] as const;
 
 export function TheStay({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
   const isRtl = locale === "ar";
 
   return (
-    <section id="amenities" className="bg-ivory overflow-hidden">
-      <div className={`grid lg:grid-cols-2 ${isRtl ? "lg:grid-flow-dense" : ""}`}>
-
-        {/* ─── Photograph ────────────────────────────────────── */}
-        {/* Using daylight suite — different from the living room */}
-        {/* photo in HotelIntroduction. Each section has its own  */}
-        {/* visual character.                                      */}
+    <section id="amenities" className="bg-ivory">
+      <div className="mx-auto max-w-[1280px] px-6 py-16 sm:px-10 lg:px-14 lg:py-24">
+        {/* ─── In-room photograph + features ──────────────────── */}
         <div
-          className={`relative min-h-[360px] md:min-h-[520px] lg:min-h-0 ${
-            isRtl ? "lg:col-start-2" : ""
+          className={`grid items-center gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-16 ${
+            isRtl ? "lg:grid-flow-dense" : ""
           }`}
         >
-          <Image
-            src={photos.daylight.src}
-            alt={photos.daylight.alt}
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
-          />
+          <Reveal
+            className={`relative min-h-[300px] overflow-hidden md:min-h-[440px] lg:min-h-[520px] ${
+              isRtl ? "lg:col-start-2" : ""
+            }`}
+          >
+            <Image
+              src={photos.kitchenette.src}
+              alt={photos.kitchenette.alt}
+              fill
+              sizes="(min-width: 1024px) 55vw, 100vw"
+              className="object-cover"
+            />
+          </Reveal>
+
+          <Reveal delay={80} className={isRtl ? "lg:col-start-1 lg:row-start-1" : ""}>
+            <p className={`label ${isRtl ? "text-right" : ""}`}>{t.theStay.eyebrow}</p>
+            <h2
+              className={`display-heading mt-4 text-[1.8rem] leading-[1.14] text-espresso sm:text-[2.2rem] ${
+                isRtl ? "text-right" : ""
+              }`}
+            >
+              {t.theStay.inRoomTitle}
+            </h2>
+            <p
+              className={`mt-5 max-w-[44ch] font-sans text-[13px] leading-[1.8] text-espresso/62 ${
+                isRtl ? "text-right" : ""
+              }`}
+            >
+              {t.theStay.body}
+            </p>
+            <ul className={`mt-8 ${isRtl ? "text-right" : ""}`} aria-label={t.theStay.inRoom}>
+              {inRoomFeatures.map((feature) => {
+                const FeatureIcon = inRoomIcons[feature];
+                return (
+                  <li
+                    key={feature}
+                    className="flex items-center gap-4 border-t border-line/70 py-3 last:border-b"
+                  >
+                    <FeatureIcon
+                      className="h-[18px] w-[18px] shrink-0 text-walnut/70"
+                      strokeWidth={1.25}
+                      aria-hidden
+                    />
+                    <span className="font-sans text-[13px] text-espresso/80">
+                      {t.theStay.features[feature]}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </Reveal>
         </div>
 
-        {/* ─── Content ─────────────────────────────────────────── */}
+        {/* ─── Services — the numbered index ──────────────────── */}
         <div
-          className={`flex flex-col justify-center px-6 py-14 sm:px-10 lg:px-14 xl:px-18 lg:py-20 ${
-            isRtl ? "lg:col-start-1 lg:row-start-1 text-right" : ""
+          className={`mt-16 grid items-center gap-10 border-t border-line pt-12 lg:grid-cols-[1fr_1.35fr] lg:gap-16 ${
+            isRtl ? "lg:grid-flow-dense" : ""
           }`}
         >
-          <Reveal>
-            <p className="label">{t.moreThanRoom.eyebrow}</p>
+          <Reveal className={`relative min-h-[300px] overflow-hidden md:min-h-[400px] lg:min-h-[480px]`}>
+            <Image
+              src={photos.linen.src}
+              alt={photos.linen.alt}
+              fill
+              sizes="(min-width: 1024px) 38vw, 100vw"
+              className="object-cover"
+            />
+          </Reveal>
+
+          <Reveal delay={80} className={isRtl ? "lg:col-start-1 lg:row-start-1" : ""}>
+            <p className={`label ${isRtl ? "text-right" : ""}`}>{t.amenities.eyebrow}</p>
             <h2
-              className={`mt-4 font-display font-medium italic leading-[1.1] text-espresso
-                text-[1.85rem] sm:text-[2.2rem] lg:text-[2.5rem]`}
+              className={`display-heading mt-4 text-[1.8rem] leading-[1.14] text-espresso sm:text-[2.2rem] ${
+                isRtl ? "text-right" : ""
+              }`}
             >
-              {t.moreThanRoom.title}
+              {t.amenities.title}
             </h2>
-            <p className="mt-4 max-w-[40ch] font-sans text-[13px] leading-relaxed text-espresso/62">
-              {t.moreThanRoom.body}
-            </p>
-          </Reveal>
-
-          {/* ─── Hotel stats ─────────────────────────────────── */}
-          <Reveal delay={80}>
-            <dl
-              className="mt-8 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 gap-px bg-line border border-line"
-              aria-label="Key hotel facts"
-            >
-              {t.moreThanRoom.stats.map((stat, i) => (
-                <div key={i} className="bg-ivory px-4 py-4">
-                  <dt className="font-sans text-[9px] font-semibold uppercase tracking-[0.16em] text-taupe">
-                    {stat.label}
-                  </dt>
-                  <dd className="mt-1.5 font-display font-medium leading-none text-espresso text-[1.35rem]">
-                    {stat.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-
-          {/* ─── Numbered service list ───────────────────────── */}
-          {/* No icons. No cards. A simple typographic index.    */}
-          <Reveal delay={120}>
             <ol
               className={`mt-8 ${isRtl ? "text-right" : ""}`}
               aria-label={t.amenities.eyebrow}
             >
               {featuredAmenities.map((item, idx) => {
                 const copy = t.amenities.items[item.id];
+                const Icon = amenityIcons[item.id];
                 return (
                   <li
                     key={item.id}
-                    className={`flex gap-4 border-t border-line/50 py-3 first:border-t-0 ${
+                    className={`flex items-center gap-4 border-t border-line/70 py-3.5 last:border-b ${
                       isRtl ? "flex-row-reverse" : ""
                     }`}
                   >
                     <span
-                      className="shrink-0 font-sans text-[10px] font-medium tabular-nums text-taupe/35 mt-0.5"
+                      className="shrink-0 font-sans text-[10px] font-medium tabular-nums text-taupe/45"
                       aria-hidden
                     >
                       {String(idx + 1).padStart(2, "0")}
                     </span>
+                    <Icon
+                      className="h-[18px] w-[18px] shrink-0 text-walnut/70"
+                      strokeWidth={1.25}
+                      aria-hidden
+                    />
                     <div>
-                      <p className="font-sans text-[12px] font-medium text-espresso/80 leading-snug">
+                      <p className="font-sans text-[13px] font-medium leading-snug text-espresso/85">
                         {copy.title}
                       </p>
-                      <p className="mt-0.5 font-sans text-[11px] text-taupe/60 leading-snug">
+                      <p className="mt-0.5 font-sans text-[11px] leading-snug text-taupe/65">
                         {copy.text}
                       </p>
                     </div>

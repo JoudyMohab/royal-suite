@@ -1,132 +1,63 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Locale } from "@/lib/site-config";
-import { siteConfig } from "@/lib/site-config";
 import { getDictionary, localePath } from "@/lib/i18n";
 import { GalleryLightbox } from "@/components/hotel/GalleryLightbox";
 import { photos } from "@/data/photos";
 import { Reveal } from "@/components/ui/Reveal";
 
-export function GalleryBlock({
-  locale,
-  headingLevel = "h2",
-}: {
-  locale: Locale;
-  headingLevel?: "h1" | "h2";
-}) {
-  const t = getDictionary(locale);
-  const Heading = headingLevel;
-  const isRtl = locale === "ar";
-
-  return (
-    <section className="bg-cream py-16 md:py-24">
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
-        <Reveal>
-          <p className={`label ${isRtl ? "text-right" : ""}`}>{t.gallery.eyebrow}</p>
-          <Heading
-            className={`mt-2 font-display text-3xl text-espresso md:text-[2.5rem] ${isRtl ? "text-right" : ""}`}
-          >
-            {t.gallery.title}
-          </Heading>
-        </Reveal>
-
-        <Reveal delay={80}>
-          <GalleryLightbox locale={locale} />
-        </Reveal>
-
-        <Reveal delay={120}>
-          <div
-            className={`mt-8 flex flex-wrap items-center gap-5 ${isRtl ? "flex-row-reverse" : ""}`}
-          >
-            <a
-              href={siteConfig.social.instagramUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="font-sans text-sm text-walnut underline decoration-champagne underline-offset-4 hover:text-walnut-deep"
-            >
-              {t.gallery.instagram} · {siteConfig.social.instagram}
-            </a>
-            <Link
-              href={localePath(locale, "/gallery")}
-              className="font-sans text-sm text-espresso/60 hover:text-espresso"
-            >
-              {t.nav.gallery}
-            </Link>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
 /**
- * Asymmetric editorial photo strip — used on the homepage.
- * 5 photos in a mixed-aspect mosaic: one tall left, three stacked middle, one wide right.
+ * CHAPTER 07 — DISCOVER
+ *
+ * Editorial mosaic: tall hero image left, stacked details, wide
+ * balcony view. Clicking any photograph opens the full lightbox with
+ * the whole gallery — the strip is an entrance, not a container.
  */
-export function InstagramStrip({ locale }: { locale: Locale }) {
+export function GalleryDiscover({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
   const isRtl = locale === "ar";
 
-  /* Photos for the mosaic */
+  /*
+   * Mosaic — ordered to mirror the lightbox indices it opens.
+   *
+   * The proportion changes deliberately across the strip: a dominant
+   * interior over two rows, one wide detail, then three small square
+   * details beneath. Phone: a full-width lead with a two-column tail.
+   */
   const mosaic = [
-    { photo: photos.living, span: "row-span-2", aspect: "aspect-[3/4]" },   // tall left
-    { photo: photos.kitchenette, span: "", aspect: "aspect-square" },        // top-middle
-    { photo: photos.linen, span: "", aspect: "aspect-square" },              // bottom-middle
-    { photo: photos.balcony, span: "col-span-1 row-span-2", aspect: "aspect-[4/3]" }, // right top (wide)
-    { photo: photos.bathroom, span: "", aspect: "aspect-square" },           // right bottom
+    { photo: photos.living, class: "col-span-2 aspect-[4/3] sm:col-span-3 sm:row-span-2 sm:aspect-auto" },
+    { photo: photos.kitchenette, class: "aspect-[4/3] sm:col-span-3 sm:aspect-auto" },
+    { photo: photos.linen, class: "aspect-[4/3] sm:col-span-1 sm:aspect-auto" },
+    { photo: photos.balcony, class: "aspect-[4/3] sm:col-span-1 sm:aspect-auto" },
+    { photo: photos.bathroom, class: "aspect-[4/3] sm:col-span-1 sm:aspect-auto" },
   ];
 
   return (
-    <section className="border-y border-line bg-paper py-14 md:py-20">
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-6">
+    <section className="bg-paper py-16 md:py-24">
+      <div className="mx-auto max-w-[1280px] px-6 sm:px-10 lg:px-14">
         <Reveal>
           <div
-            className={`mb-7 flex flex-wrap items-end justify-between gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`flex flex-wrap items-end justify-between gap-4 ${
+              isRtl ? "flex-row-reverse" : ""
+            }`}
           >
             <div className={isRtl ? "text-right" : ""}>
-              <p className="label">{t.gallery.instagram}</p>
-              <p className="mt-1 font-sans text-sm text-taupe">
-                {siteConfig.social.instagram}
-              </p>
+              <p className="label">{t.discover.eyebrow}</p>
+              <h2 className="display-heading mt-3 text-[1.9rem] leading-[1.12] text-espresso sm:text-[2.35rem]">
+                {t.discover.title}
+              </h2>
             </div>
-            <a
-              href={siteConfig.social.instagramUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="font-sans text-sm font-medium text-walnut hover:text-walnut-deep underline decoration-champagne underline-offset-4"
+            <Link
+              href={localePath(locale, "/gallery")}
+              className="shrink-0 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-espresso/70 underline decoration-champagne underline-offset-8 transition-colors hover:text-espresso"
             >
-              {t.gallery.instagram} →
-            </a>
+              {t.discover.viewGallery} →
+            </Link>
           </div>
         </Reveal>
 
-        {/* Asymmetric mosaic */}
         <Reveal delay={80}>
-          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 sm:grid-rows-2 sm:gap-2">
-            {/* Mobile: just a uniform 2-col grid */}
-            {mosaic.map(({ photo }, i) => (
-              <a
-                key={photo.src + i}
-                href={siteConfig.social.instagramUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-                className={`relative overflow-hidden bg-cream ${
-                  i === 0
-                    ? "sm:row-span-2"
-                    : i === 3
-                      ? "col-span-1 hidden sm:block"
-                      : ""
-                } aspect-square`}
-              >
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  sizes="(min-width: 640px) 25vw, 50vw"
-                  className="object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </a>
-            ))}
+          <div className="mt-10">
+            <GalleryLightbox locale={locale} mosaic={mosaic} />
           </div>
         </Reveal>
       </div>

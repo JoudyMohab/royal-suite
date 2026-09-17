@@ -12,6 +12,17 @@ const categoryPhoto = {
   family: roomPhotos("family")[0],
 };
 
+/**
+ * CHAPTER 03 — ROOMS & SUITES
+ *
+ * A hotel catalogue, browsed by accommodation type — never by room
+ * number. One composition per room type, each with its own proportion:
+ *
+ *   Double Room   — photo left, text beside it
+ *   Triple Room   — same composition mirrored
+ *   Family Suite  — THE ROYAL STAY: full-bleed feature with a
+ *                   champagne information panel, the visual peak
+ */
 export function RoomsPreview({
   locale,
   headingLevel = "h2",
@@ -28,10 +39,9 @@ export function RoomsPreview({
   const isRtl = locale === "ar";
 
   /**
-   * On the homepage, room numbers are never displayed.
-   * Room 101, 102, 103 are operational identifiers — not guest-facing
-   * browsing categories. Guests choose an accommodation type, not a
-   * room number. Numbers appear only on the full /rooms page.
+   * Room numbers are operational identifiers. On the homepage they are
+   * never shown; on the full /rooms page they remain as quiet links
+   * beneath each category, because deep links already exist.
    */
   const showRoomNumbers = variant === "all";
 
@@ -69,227 +79,212 @@ export function RoomsPreview({
     <section className="bg-paper">
       {/* ─── Section header ───────────────────────────────── */}
       {!hideHeader && (
-        <div className="mx-auto max-w-[1280px] px-5 pb-10 pt-16 sm:px-8 lg:px-14">
+        <div className="mx-auto max-w-[1280px] px-6 pb-10 pt-16 sm:px-10 lg:px-14 lg:pt-20">
           <Reveal>
-            <p className={`label ${isRtl ? "text-right" : ""}`}>{t.rooms.eyebrow}</p>
-            <div
-              className={`mt-3 flex flex-wrap items-end justify-between gap-4 ${isRtl ? "flex-row-reverse" : ""}`}
-            >
-              <Heading className="font-display text-[1.85rem] font-medium leading-tight text-espresso sm:text-[2.25rem]">
-                {variant === "home" ? t.rooms.homeTitle : t.rooms.title}
-              </Heading>
-              {variant === "home" && (
-                <Link
-                  href={localePath(locale, "/rooms")}
-                  className="shrink-0 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-walnut underline decoration-champagne underline-offset-4 hover:text-walnut-deep"
+            {/*
+             * Homepage: the chapter reads label → heading → note, with
+             * the one outbound link sharing the label's baseline.
+             * Full page: the page header carries the H1, so the single
+             * descriptive heading stands alone.
+             */}
+            {variant === "home" ? (
+              <>
+                <div
+                  className={`flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 ${
+                    isRtl ? "flex-row-reverse" : ""
+                  }`}
                 >
-                  {t.rooms.seeAll} →
-                </Link>
-              )}
-            </div>
-            <p className={`mt-3 max-w-2xl font-sans text-[13px] leading-relaxed text-espresso/55 ${isRtl ? "text-right" : ""}`}>
-              {t.rooms.intro}
-            </p>
+                  <p className="label">{t.rooms.homeTitle}</p>
+                  <Link
+                    href={localePath(locale, "/rooms")}
+                    className="shrink-0 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-espresso/70 underline decoration-champagne underline-offset-8 transition-colors hover:text-espresso"
+                  >
+                    {t.rooms.seeAll} →
+                  </Link>
+                </div>
+                <Heading
+                  className={`display-heading mt-4 max-w-[22ch] text-[1.8rem] leading-[1.14] text-espresso sm:text-[2.2rem] ${
+                    isRtl ? "text-right" : ""
+                  }`}
+                >
+                  {t.rooms.homeHeading}
+                </Heading>
+                <p
+                  className={`mt-4 max-w-[52ch] font-sans text-[13px] leading-relaxed text-espresso/55 ${
+                    isRtl ? "text-right" : ""
+                  }`}
+                >
+                  {t.rooms.homeIntro}
+                </p>
+              </>
+            ) : (
+              <Heading
+                className={`display-heading max-w-[24ch] text-[1.8rem] leading-[1.14] text-espresso sm:text-[2.2rem] ${
+                  isRtl ? "text-right" : ""
+                }`}
+              >
+                {t.rooms.title}
+              </Heading>
+            )}
           </Reveal>
         </div>
       )}
 
-      {/* ─── Room catalogue ───────────────────────────────── */}
-      <div>
-        {groups.map((group) => {
-          const photo = categoryPhoto[group.id];
-          const isReversed = isRtl
-            ? group.weight === "primary"
-            : group.weight === "secondary";
+      {/* ─── Catalogue ─────────────────────────────────────── */}
+      {groups.map((group) => {
+        const photo = categoryPhoto[group.id];
+        const isFeatured = group.weight === "full";
+        const isReversed =
+          isRtl ? group.weight === "primary" : group.weight === "secondary";
 
-          /* ── Family Suite — cinematic full-width overlay ── */
-          if (group.weight === "full") {
-            return (
-              <Reveal key={group.id}>
-                <article className="relative overflow-hidden">
-                  <div className="relative min-h-[480px] md:min-h-[580px] lg:min-h-[68vh]">
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      sizes="100vw"
-                      className="object-cover object-center"
-                    />
-                    <div
-                      className="pointer-events-none absolute inset-0"
-                      style={{
-                        background:
-                          "linear-gradient(to top, rgba(46,37,33,0.72) 0%, rgba(46,37,33,0.20) 45%, transparent 70%)",
-                      }}
-                      aria-hidden
-                    />
-                  </div>
-
-                  <div
-                    className={`absolute bottom-0 px-5 pb-10 sm:px-8 sm:pb-14 lg:px-14 lg:pb-16 ${
-                      isRtl ? "right-0 text-right" : "left-0"
-                    } max-w-2xl`}
-                  >
-                    <p className="label text-champagne/70">{group.title}</p>
-                    <h3 className="mt-3 font-display text-[1.85rem] font-medium italic leading-[1.1] text-paper sm:text-[2.4rem] lg:text-[3rem]">
-                      {group.title}
-                    </h3>
-                    <p className="mt-3 font-sans text-[13px] leading-relaxed text-paper/60">
-                      {group.body}
-                    </p>
-                    <p className="mt-1 font-sans text-[11px] text-paper/45">
-                      {t.rooms.guests(group.list[0].maxGuests)}
-                      {" · "}
-                      {t.rooms.availabilityUnknown}
-                    </p>
-                    <div className={`mt-7 flex gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
-                      <Link
-                        href={localePath(locale, `/rooms/${group.list[0].slug}`)}
-                        className="inline-block border border-paper/40 px-6 py-2.5 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-paper/85 transition-colors hover:border-paper/80"
-                      >
-                        {t.rooms.viewRoom}
-                      </Link>
-                      <Link
-                        href={`${localePath(locale, "/rooms")}#availability`}
-                        className="inline-block bg-walnut px-6 py-2.5 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-paper transition-colors hover:bg-walnut-deep"
-                      >
-                        {t.rooms.bookNow}
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            );
-          }
-
-          /* ── Double / Triple Room — editorial split ──────── */
-          const isPrimary = group.weight === "primary";
-
+        /* ── THE ROYAL STAY — full-bleed walnut feature ── */
+        if (isFeatured) {
+          const familyRoom = group.list[0];
           return (
-            <Reveal key={group.id}>
-              {/*
-               * Column proportions are intentionally asymmetric:
-               *
-               * Double Room (primary):  3fr : 2fr  — photo 60%, text 40%
-               *   The large bedroom photograph is the dominant element.
-               *   The narrow editorial text panel beside it creates tension.
-               *
-               * Triple Room (secondary): 7fr : 5fr reversed — text 58%, photo 42%
-               *   A text-heavier treatment creates visual contrast with the
-               *   Double Room above. The rhythm shifts from photographic to
-               *   editorial, then back to cinematic (Family Suite, full-width).
-               */}
-              <article
-                className={`grid border-t border-line ${
-                  isPrimary
-                    ? "lg:grid-cols-[3fr_2fr]"
-                    : `lg:grid-cols-[7fr_5fr] ${isReversed ? "lg:grid-flow-dense" : ""}`
-                }`}
+            <article key={group.id}>
+              <div
+                className={`grid lg:grid-cols-[1.5fr_1fr] ${isRtl ? "lg:grid-flow-dense" : ""}`}
               >
-                {/* Photograph — fills its column, no panel/mat/border */}
-                <div
-                  className={`relative overflow-hidden ${
-                    isPrimary
-                      ? "min-h-[360px] md:min-h-[500px] lg:min-h-[580px]"
-                      : "min-h-[280px] md:min-h-[400px] lg:min-h-[460px]"
-                  } ${isReversed ? "lg:col-start-2" : ""}`}
-                >
+                {/* Photograph — walnut behind the image while it loads */}
+                <div className="relative min-h-[420px] bg-walnut-deep md:min-h-[560px] lg:min-h-[680px]">
                   <Image
                     src={photo.src}
                     alt={photo.alt}
                     fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-700 hover:scale-[1.02]"
+                    sizes="(min-width: 1024px) 60vw, 100vw"
+                    className="object-cover object-center"
                   />
                 </div>
 
-                {/* Editorial text — page background, no card, no panel */}
+                {/* Information panel */}
+                {/* Information panel — champagne, espresso type */}
                 <div
-                  className={`flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 xl:px-18 lg:py-20 ${
-                    isReversed ? "lg:col-start-1 lg:row-start-1" : ""
-                  } ${isRtl ? "text-right" : ""}`}
+                  className={`flex flex-col justify-center bg-champagne px-6 py-14 text-espresso sm:px-10 lg:px-14 xl:px-16 lg:py-20 ${
+                    isRtl ? "lg:col-start-1 lg:row-start-1 text-right" : ""
+                  }`}
                 >
-                  {/* Small metadata label */}
-                  <p className="label">{t.rooms.eyebrow}</p>
+                  <Reveal>
+                    <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.24em] text-espresso/70">
+                      {t.rooms.featuredKicker}
+                    </p>
+                    <h3 className="display-heading mt-4 text-[2.2rem] leading-[1.08] text-espresso sm:text-[2.7rem] lg:text-[3.1rem]">
+                      {t.rooms.featured}
+                    </h3>
+                    <p className="mt-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-espresso/70">
+                      {t.rooms.featuredLabel}
+                    </p>
+                    <p className="mt-7 font-sans text-[13px] leading-[1.8] text-espresso/90">
+                      {t.rooms.featuredBody}
+                    </p>
+                    <p className="mt-4 font-sans text-[11px] text-espresso/70">
+                      {t.rooms.featuredMeta(familyRoom.maxGuests)}
+                    </p>
 
-                  {/* Room category name */}
-                  {/*
-                   * Double Room: narrower text column (2fr), so heading is
-                   * slightly smaller to avoid feeling cramped.
-                   * Triple Room: wider text column (7fr), can accommodate
-                   * a more generous heading.
-                   */}
-                  <h3
-                    className={`mt-4 font-display font-medium italic leading-[1.1] text-espresso ${
-                      isPrimary
-                        ? "text-[1.65rem] sm:text-[2rem] lg:text-[2.4rem]"
-                        : "text-[1.65rem] sm:text-[2.1rem] lg:text-[2.65rem]"
-                    }`}
-                  >
-                    {group.title}
-                  </h3>
-
-                  {/* Capacity */}
-                  <p className="mt-2 font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-taupe/80">
-                    {t.rooms.guests(group.list[0].maxGuests)}
-                  </p>
-
-                  {/* Thin rule */}
-                  <div className="mt-5 h-px w-10 bg-champagne/60" aria-hidden />
-
-                  {/* Description */}
-                  <p className="mt-5 max-w-[38ch] font-sans text-[13px] leading-relaxed text-espresso/60">
-                    {group.body}
-                  </p>
-
-                  {/* Availability note */}
-                  <p className="mt-2 font-sans text-[11px] text-taupe/60">
-                    {t.rooms.availabilityUnknown}
-                  </p>
-
-                  {/*
-                   * Room number links — shown only on the /rooms page.
-                   * Hidden on the homepage: they are operational identifiers.
-                   */}
-                  {showRoomNumbers && (
-                    <div className={`mt-5 flex flex-wrap gap-x-3 gap-y-1 ${isRtl ? "justify-end" : ""}`}>
-                      {group.list.map((room) => (
-                        <Link
-                          key={room.number}
-                          href={localePath(locale, `/rooms/${room.slug}`)}
-                          className="font-sans text-[11px] text-taupe/70 underline underline-offset-2 hover:text-walnut"
-                        >
-                          {t.rooms.room(room.number)}
-                        </Link>
-                      ))}
+                    <div
+                      className={`mt-9 flex flex-wrap gap-3 ${isRtl ? "flex-row-reverse" : ""}`}
+                    >
+                      <Link
+                        href={localePath(locale, `/rooms/${familyRoom.slug}`)}
+                        className="inline-block bg-espresso px-6 py-3 font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-paper transition-colors hover:bg-walnut-deep"
+                      >
+                        {t.rooms.viewRoom} →
+                      </Link>
+                      <Link
+                        href={`${localePath(locale, "/rooms")}#availability`}
+                        className="inline-block border border-espresso/40 px-6 py-3 font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-espresso transition-colors hover:border-espresso"
+                      >
+                        {t.rooms.bookNow}
+                      </Link>
                     </div>
-                  )}
-
-                  {/* Actions */}
-                  <div className={`mt-8 flex gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
-                    <Link
-                      href={localePath(locale, `/rooms/${group.list[0].slug}`)}
-                      className="border border-champagne/70 px-6 py-2.5 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-espresso transition-colors hover:bg-cream"
-                    >
-                      {t.rooms.viewRoom}
-                    </Link>
-                    <Link
-                      href={`${localePath(locale, "/rooms")}#availability`}
-                      className="bg-walnut px-6 py-2.5 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-paper transition-colors hover:bg-walnut-deep"
-                    >
-                      {t.rooms.bookNow}
-                    </Link>
-                  </div>
+                  </Reveal>
                 </div>
-              </article>
-            </Reveal>
+              </div>
+            </article>
           );
-        })}
-      </div>
+        }
+
+        /* ── Double / Triple Room — mirrored editorial split ── */
+        return (
+          <Reveal key={group.id}>
+            <article
+              className={`grid border-t border-line lg:grid-cols-2 ${
+                isReversed ? "lg:grid-flow-dense" : ""
+              }`}
+            >
+              {/*
+               * Photograph — one shared container for every category so
+               * the alternating rhythm keeps a single, consistent scale.
+               * object-cover fills it without distortion.
+               */}
+              <div
+                className={`relative min-h-[340px] overflow-hidden md:min-h-[480px] lg:min-h-[560px] ${
+                  isReversed ? "lg:col-start-2" : ""
+                }`}
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                  className="object-cover transition-transform duration-700 hover:scale-[1.02]"
+                />
+              </div>
+
+              {/* Editorial text — no card, no panel */}
+              <div
+                className={`flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 lg:py-16 ${
+                  isReversed ? "lg:col-start-1 lg:row-start-1" : ""
+                } ${isRtl ? "text-right" : ""}`}
+              >
+                {/* Capacity as the eyebrow, room name as the display heading */}
+                <p className="label">{t.rooms.guests(group.list[0].maxGuests)}</p>
+                <h3
+                  className="display-heading mt-3 text-[1.7rem] leading-[1.12] text-espresso sm:text-[2.1rem]"
+                >
+                  {group.title}
+                </h3>
+                <div className="mt-5 h-px w-10 bg-champagne" aria-hidden />
+                <p className="mt-5 max-w-[38ch] font-sans text-[13px] leading-relaxed text-espresso/60">
+                  {group.body}
+                </p>
+                <p className="mt-2 font-sans text-[11px] text-taupe/60">
+                  {t.rooms.availabilityUnknown}
+                </p>
+
+                {/* Room numbers — only on /rooms, as quiet deep links */}
+                {showRoomNumbers && (
+                  <div
+                    className={`mt-5 flex flex-wrap gap-x-3 gap-y-1 ${isRtl ? "justify-end" : ""}`}
+                  >
+                    {group.list.map((room) => (
+                      <Link
+                        key={room.number}
+                        href={localePath(locale, `/rooms/${room.slug}`)}
+                        className="font-sans text-[11px] text-taupe/70 underline underline-offset-2 hover:text-walnut"
+                      >
+                        {t.rooms.room(room.number)}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                <div className={`mt-8 flex gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
+                  <Link
+                    href={localePath(locale, `/rooms/${group.list[0].slug}`)}
+                    className="inline-block border border-espresso/30 px-5 py-2.5 font-sans text-[9px] font-semibold uppercase tracking-[0.2em] text-espresso transition-colors hover:border-espresso hover:bg-espresso hover:text-paper"
+                  >
+                    {t.rooms.viewRoom} →
+                  </Link>
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        );
+      })}
 
       {variant !== "home" && (
-        <div className="mx-auto max-w-[1280px] px-5 py-8 sm:px-8 lg:px-14">
-          <p className="font-sans text-[11px] leading-relaxed text-taupe/65">
+        <div className="mx-auto max-w-[1280px] px-6 py-8 sm:px-10 lg:px-14">
+          <p className="max-w-3xl font-sans text-[11px] leading-relaxed text-taupe/65">
             {t.rooms.verifiedNote}
           </p>
         </div>

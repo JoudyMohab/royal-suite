@@ -20,6 +20,17 @@ export default async function Home() {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: t.nav.home, path: "/" }], locale)} />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: t.faq.items.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        }}
+      />
       <HomePage locale={locale} />
     </>
   );

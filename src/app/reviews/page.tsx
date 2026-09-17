@@ -32,7 +32,15 @@ export default async function ReviewsPage() {
           locale,
         )}
       />
-      <ReviewsBlock locale={locale} headingLevel="h1" showLink={false} />
+      <section className="bg-cream px-6 pb-10 pt-14 sm:px-10 lg:px-14">
+        <div className={`mx-auto max-w-[1280px] ${locale === "ar" ? "text-right" : ""}`}>
+          <p className="label">{t.reviews.eyebrow}</p>
+          <h1 className="display-heading mt-3 text-[1.9rem] leading-[1.12] text-espresso sm:text-[2.35rem]">
+            {t.reviews.title}
+          </h1>
+        </div>
+      </section>
+      <ReviewsBlock locale={locale} showLink={false} />
       <BookingCta locale={locale} />
     </>
   );

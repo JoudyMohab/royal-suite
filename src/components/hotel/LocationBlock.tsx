@@ -3,15 +3,8 @@ import { siteConfig } from "@/lib/site-config";
 import { getDictionary } from "@/lib/i18n";
 import { Reveal } from "@/components/ui/Reveal";
 
-export function LocationBlock({
-  locale,
-  headingLevel = "h2",
-}: {
-  locale: Locale;
-  headingLevel?: "h1" | "h2";
-}) {
+export function LocationBlock({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
-  const Heading = headingLevel;
   const { lat, lng } = siteConfig.address;
   const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.018}%2C${lat - 0.011}%2C${lng + 0.018}%2C${lat + 0.011}&layer=mapnik&marker=${lat}%2C${lng}`;
   const isRtl = locale === "ar";
@@ -27,12 +20,12 @@ export function LocationBlock({
           >
             <div>
               <p className="label">{t.location.eyebrow}</p>
-              <Heading className="mt-3 font-display text-[2.5rem] font-medium leading-[1.06] text-espresso md:text-[3rem]">
+              <h2 className="display-heading mt-3 text-[1.7rem] leading-[1.14] text-espresso sm:text-[2rem]">
                 {t.location.title}
-              </Heading>
+              </h2>
             </div>
             <div>
-              <p className="font-sans text-[15px] leading-relaxed text-espresso/70">
+              <p className="font-sans text-[14px] leading-relaxed text-espresso/70">
                 {t.location.body}
               </p>
               <p className="mt-3 font-sans text-sm text-taupe">

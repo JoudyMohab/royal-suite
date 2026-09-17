@@ -10,7 +10,7 @@ export function MobileBookBar({ locale }: { locale: Locale }) {
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ivory p-3 md:hidden">
       <Link
         href={`${localePath(locale, "/rooms")}#availability`}
-        className="flex w-full items-center justify-center bg-walnut py-3 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-paper"
+        className="flex w-full items-center justify-center bg-espresso py-3.5 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-paper transition-colors hover:bg-walnut"
       >
         {t.mobileBook}
       </Link>

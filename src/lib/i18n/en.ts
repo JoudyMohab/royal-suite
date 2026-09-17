@@ -2,10 +2,10 @@ export const en = {
   meta: {
     homeTitle: "Royal Suite Hotel | Nasr City, Cairo",
     homeDescription:
-      "Stay at Royal Suite Hotel in Nasr City, Cairo — comfortable suites with kitchenettes, free Wi-Fi, free parking, and a 24-hour front desk near City Stars and Cairo International Airport.",
+      "Royal Suite Hotel on Abbas El-Akkad in Nasr City, Cairo — eleven rooms and suites with kitchenettes, free Wi-Fi and parking, a 24-hour front desk, about 10 km from Cairo International Airport.",
     roomsTitle: "Rooms & Suites | Royal Suite Hotel Cairo",
     roomsDescription:
-      "Browse the 11 rooms at Royal Suite Hotel in Nasr City, from two-guest suites to a family room for five. Select dates to view rates when booking is available.",
+      "Rooms and suites at Royal Suite Hotel in Nasr City — every room with a kitchenette, washing machine and private bathroom. Select dates to view rates when booking is available.",
     roomTitle: (number: string) => `Room ${number} | Royal Suite Hotel Cairo`,
     roomDescription: (number: string, guests: number) =>
       `Room ${number} at Royal Suite Hotel in Nasr City sleeps up to ${guests} guests, with a kitchenette, private bathroom, air conditioning and free Wi-Fi.`,
@@ -55,14 +55,12 @@ export const en = {
   hero: {
     kicker: "Royal Suite Hotel",
     place: "Nasr City · Cairo",
-    title: "Stay in Cairo, comfortably.",
-    cta: "Check Availability",
+    statement: "A comfortable base for Cairo.",
   },
   hotelIntro: {
     eyebrow: "The Hotel",
-    title1: "A comfortable base",
-    title2: "for Cairo.",
-    body: "Eleven rooms above Costa Coffee on Abbas El-Akkad. Each with its own kitchenette, washing machine and private bathroom. A 24-hour front desk, free parking and a direct airport connection.",
+    title: "Eleven rooms, each with its own kitchenette.",
+    body: "Royal Suite sits above Costa Coffee on Abbas El-Akkad in Nasr City — a 24-hour front desk, free parking on site, and a direct connection to Cairo International Airport.",
     facts: [
       { label: "Check-in", value: "From 2 PM" },
       { label: "Check-out", value: "12 PM" },
@@ -74,12 +72,11 @@ export const en = {
     checkIn: "Check-in",
     checkOut: "Check-out",
     rooms: "Rooms",
-    adults: "Adults",
-    children: "Children",
+    guests: "Guests",
     submit: "Check Availability",
-    selectDates: "Select your dates to view rates",
+    selectDates: "Select your dates to view rates.",
     providerUnavailable:
-      "Live rates are not connected yet. Matching rooms are shown by occupancy. Pricing will appear here once a booking provider is integrated.",
+      "Online rates are not connected yet. Rooms that can sleep your party are shown below — pricing appears here once booking is connected.",
     occupancyNote: "Rooms that can sleep your party",
     noMatch: "No rooms in inventory sleep this many guests in a single room.",
     enquire: "Enquire to book",
@@ -87,12 +84,15 @@ export const en = {
   },
   rooms: {
     eyebrow: "Rooms & Suites",
-    title: "Eleven rooms. Three occupancy types.",
+    title: "Every room includes a kitchenette, washing machine and private bathroom.",
     homeTitle: "Rooms & Suites",
+    homeHeading: "Spaces designed for comfortable stays in Cairo.",
+    homeIntro:
+      "Browse by accommodation type rather than by room number. Rates appear here once a booking provider is connected.",
     seeAll: "View all rooms",
     specs: "Room specifications",
     intro:
-      "A selection of comfortable rooms in Nasr City, Cairo. Each includes a kitchenette, washing machine and private bathroom.",
+      "Double rooms, triple rooms and one family suite for up to five guests. Select your dates to see which rooms fit your party.",
     viewRoom: "View Room",
     bookNow: "Book Now",
     guests: (n: number) => `Up to ${n} guests`,
@@ -101,12 +101,20 @@ export const en = {
     availabilityUnknown: "Select your dates to view rates",
     features: "Room features",
     gallery: "Room photography",
-    rateOptions: "Rate options",
+    rateOptions: "Rates",
+    ratesPlaceholder: "Select your dates on the rooms page to view rates and rate conditions.",
     cancellation:
       "Cancellation terms depend on the rate you select and will be shown by the booking provider.",
     breakfast:
       "Breakfast is available at the hotel. Whether it is included depends on the rate.",
     bookThis: "Book this room",
+    exploreAll: "Explore all rooms",
+    featured: "The Royal Stay",
+    featuredKicker: "Featured accommodation",
+    featuredLabel: "Family Suite",
+    featuredMeta: (n: number) => `Up to ${n} guests · Full kitchenette · Sitting area`,
+    featuredBody:
+      "The hotel's largest accommodation: a suite for up to five guests with a full kitchenette and a sitting area.",
     twoGuest: "Double Room",
     threeGuest: "Triple Room",
     family: "Family Suite",
@@ -126,7 +134,7 @@ export const en = {
     },
   },
   amenities: {
-    eyebrow: "Featured amenities on site",
+    eyebrow: "Amenities",
     title: "What guests use every day.",
     items: {
       wifi: { title: "Free Wi-Fi", text: "Available throughout the property." },
@@ -187,55 +195,62 @@ export const en = {
     },
   },
   shuttle: {
-    eyebrow: "Airport transfer",
+    eyebrow: "Airport shuttle",
     title: "Arrive with ease.",
-    body: "Cairo International Airport is about 10 km from the hotel — roughly a 20-minute drive in typical traffic. Paid pickup and drop-off are available on request.",
-    request: "Request a Transfer",
+    body: "Cairo International Airport is about 10 km from the hotel — roughly a 20-minute drive in typical traffic. Paid shuttle pickup and drop-off are available on request.",
+    request: "Request the airport shuttle",
     paid: "Paid service",
-    advance: "Request in advance so the hotel can arrange your transfer.",
+    advance: "Request in advance so the hotel can arrange the airport shuttle.",
     how: "Call the front desk or use the contact form — include your flight details and preferred time.",
     vehicle: "Vehicle type is confirmed at the time of booking.",
   },
   location: {
     eyebrow: "Location",
-    title: "A home in Nasr City.",
-    body: "Nasr City sits at the practical heart of Cairo — well-connected to the airport, to City Stars, and to the conference centre. Royal Suite is at 37 Abbas El-Akkad, above Costa Coffee, with free parking on site.",
+    title: "Your base in Cairo.",
+    body: "Nasr City sits at the practical heart of Cairo — well-connected to Cairo International Airport and to the conference centre. Royal Suite is at 37 Abbas El-Akkad, above Costa Coffee, with free parking on site.",
     addressLabel: "Address",
     mapTitle: "Map of Royal Suite Hotel, Nasr City",
     nearby: {
-      "city-stars": "City Stars",
+      "sphinx-airport": "Sphinx International Airport",
       airport: "Cairo International Airport",
       cicc: "Cairo International Conference Centre",
     },
   },
-  moreThanRoom: {
-    eyebrow: "What's included",
+  theStay: {
+    eyebrow: "The Stay",
     title: "More than a room.",
-    body: "Every room comes with its own kitchenette, a washing machine, air conditioning and a private bathroom. It's a hotel with the independence of an apartment.",
-    stats: [
-      { value: "10.0", label: "Wi-Fi score" },
-      { value: "24h", label: "Front desk" },
-      { value: "Free", label: "On-site parking" },
-      { value: "~10 km", label: "From the airport" },
-    ],
+    body: "Every room comes with its own kitchenette, a washing machine, air conditioning and a private bathroom — a hotel with the independence of an apartment.",
+    inRoom: "In every room",
+    inRoomTitle: "Designed for independent stays",
+    features: {
+      kitchenette: "Kitchenette",
+      "washing-machine": "Washing machine",
+      bathroom: "Private bathroom",
+      ac: "Air conditioning",
+      wifi: "Free Wi-Fi",
+      tv: "Flat-screen TV",
+      "tea-coffee": "Tea and coffee maker",
+    },
+    services: "Hotel services",
+  },
+  discover: {
+    eyebrow: "Discover",
+    title: "The hotel in photographs.",
+    viewGallery: "Open the gallery",
+  },
+  cta: {
+    title: "Ready to stay?",
+    body: "Select your dates and we will show you the rooms that fit your party.",
   },
   reviews: {
     eyebrow: "Guest reviews",
     title: "Rated 9.4 out of 10.",
     readAll: "Read all reviews",
     source: "Scores from Booking.com.",
-    link: "Open on Booking.com",
+    link: "View all reviews on Booking.com",
     legal:
-      "Individual guest quotations are not reproduced here. Please read verified reviews on Booking.com.",
-    themesTitle: "What guests mention",
-    themes: [
-      "Friendly, helpful staff",
-      "Comfortable rooms",
-      "Cleanliness",
-      "Convenient Nasr City location",
-      "24-hour reception",
-      "Clear communication before check-in",
-    ],
+      "Verified guest reviews are shown above as they appear on Booking.com.",
+    widgetLabel: "Verified reviews",
   },
   faq: {
     eyebrow: "FAQ",
@@ -323,12 +338,7 @@ export const en = {
     whatsapp: "WhatsApp",
     email: "Email",
     pending: "To be confirmed",
-  },
-  cta: {
-    title: "Check dates for your stay.",
-    body: "Choose check-in and check-out, then review rooms that fit your party.",
-  },
-  contact: {
+  },  contact: {
     title: "Contact the hotel.",
     body: "Use the details below, or send a stay enquiry. Online booking will sit on this page once a provider is connected.",
     formName: "Name",

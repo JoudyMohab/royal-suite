@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import type { Locale } from "@/lib/site-config";
-import { navItems, siteConfig } from "@/lib/site-config";
+import { navItems } from "@/lib/site-config";
 import { getDictionary, localePath } from "@/lib/i18n";
 import { getLocaleFromPathname, stripLocale } from "@/lib/i18n/paths";
 import { cn } from "@/lib/cn";

@@ -1,23 +1,34 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Locale } from "@/lib/site-config";
 import { siteConfig } from "@/lib/site-config";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, localePath } from "@/lib/i18n";
 import { photos } from "@/data/photos";
 import { Reveal } from "@/components/ui/Reveal";
 
+/**
+ * CHAPTER 02 — THE HOTEL
+ *
+ * Editorial spread: the living-room photograph fills the left column
+ * edge to edge; the right column carries label, Bodoni heading, real
+ * description, verified facts, and the 9.4 rating presented like a
+ * printed credential — not a dashboard.
+ */
 export function HotelIntroduction({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
   const { reviews } = siteConfig;
   const isRtl = locale === "ar";
 
   return (
-    <section className="bg-ivory overflow-hidden">
+    <section className="bg-ivory">
       <div
-        className={`mx-auto grid max-w-none lg:grid-cols-[1fr_1fr] ${isRtl ? "lg:grid-flow-dense" : ""}`}
+        className={`grid lg:grid-cols-2 ${isRtl ? "lg:grid-flow-dense" : ""}`}
       >
-        {/* ─── Photograph — fills its column ───────────────── */}
+        {/* ─── Photograph — full bleed within its column ─────────── */}
         <div
-          className={`relative min-h-[420px] md:min-h-[560px] lg:min-h-[680px] ${isRtl ? "lg:col-start-2" : ""}`}
+          className={`relative min-h-[420px] md:min-h-[560px] lg:min-h-[680px] ${
+            isRtl ? "lg:col-start-2" : ""
+          }`}
         >
           <Image
             src={photos.living.src}
@@ -28,66 +39,56 @@ export function HotelIntroduction({ locale }: { locale: Locale }) {
           />
         </div>
 
-        {/* ─── Editorial copy ───────────────────────────────── */}
+        {/* ─── Copy ──────────────────────────────────────────────── */}
         <div
-          className={`flex flex-col justify-center px-6 py-14 sm:px-10 lg:px-16 xl:px-20 lg:py-20 ${isRtl ? "lg:col-start-1 lg:row-start-1 text-right" : ""}`}
+          className={`flex flex-col justify-center px-6 py-14 sm:px-10 lg:px-16 xl:px-20 lg:py-24 ${
+            isRtl ? "lg:col-start-1 lg:row-start-1 text-right" : ""
+          }`}
         >
           <Reveal>
             <p className="label">{t.hotelIntro.eyebrow}</p>
-            {/*
-             * Headline reduced from 4.25rem to 2.75rem max.
-             * The large hotel photograph on the left is the statement.
-             * The headline is a specific, quiet caption — not a slogan.
-             * Bodoni italic at 2.75rem is refined. At 4.25rem it becomes
-             * the same "giant serif luxury" pattern we are avoiding.
-             */}
-            <h2
-              className={`mt-4 font-display font-medium italic leading-[1.1] text-espresso
-                text-[1.85rem]
-                sm:text-[2.25rem]
-                lg:text-[2.75rem]`}
-            >
-              {t.hotelIntro.title1}
-              <br />
-              {t.hotelIntro.title2}
+            <h2 className="display-heading mt-4 max-w-[16ch] text-[1.9rem] leading-[1.12] text-espresso sm:text-[2.3rem] lg:text-[2.6rem]">
+              {t.hotelIntro.title}
             </h2>
-            <p className="mt-5 max-w-[38ch] font-sans text-[14px] leading-[1.75] text-espresso/65">
+            <p className="mt-6 max-w-[42ch] font-sans text-[14px] leading-[1.8] text-espresso/65">
               {t.hotelIntro.body}
             </p>
           </Reveal>
 
-          {/* Facts strip */}
-          <Reveal delay={100}>
-            <dl className="mt-9 grid grid-cols-2 gap-px border border-line bg-line lg:grid-cols-4">
+          {/* Verified facts — typographic, no cards */}
+          <Reveal delay={80}>
+            <dl className={`mt-10 space-y-3 border-t border-line pt-6 ${isRtl ? "text-right" : ""}`}>
               {t.hotelIntro.facts.map((fact) => (
-                <div key={fact.label} className="bg-ivory px-5 py-5">
-                  <dt className="font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-taupe">
+                <div key={fact.label} className="flex items-baseline justify-between gap-4">
+                  <dt className="font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-taupe">
                     {fact.label}
                   </dt>
-                  <dd className="mt-2 font-display text-[1.5rem] leading-none text-espresso">
-                    {fact.value}
-                  </dd>
+                  <dd className="font-sans text-[13px] text-espresso/85">{fact.value}</dd>
                 </div>
               ))}
             </dl>
           </Reveal>
 
-          {/* ─── Trust signal ──────────────────────────────── */}
-          {/* Presented as hotel credibility, not a dashboard. */}
+          {/* Trust — a printed credential, not a widget */}
           <Reveal delay={140}>
-            <div
-              className={`mt-8 border-t border-line pt-6 flex items-baseline gap-3 ${isRtl ? "flex-row-reverse justify-end" : ""}`}
+            <Link
+              href={localePath(locale, "/reviews")}
+              className={`mt-10 flex items-center gap-6 border-t border-line pt-7 ${
+                isRtl ? "flex-row-reverse" : ""
+              }`}
             >
-              <span className="font-display font-medium leading-none text-espresso text-[2rem]">
+              <span className="font-display text-[3.4rem] font-medium leading-none text-espresso">
                 {reviews.score.toFixed(1)}
               </span>
-              <span className="font-sans text-[9px] font-semibold uppercase tracking-[0.16em] text-taupe">
-                / 10 · {reviews.label}
+              <span className={isRtl ? "text-right" : ""}>
+                <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-taupe">
+                  / 10 · {reviews.label}
+                </span>
+                <span className="mt-1 block font-sans text-[11px] text-taupe/70">
+                  {t.trust.reviews}
+                </span>
               </span>
-              <span className="font-sans text-[11px] text-taupe/60">
-                · {t.trust.reviews}
-              </span>
-            </div>
+            </Link>
           </Reveal>
         </div>
       </div>
